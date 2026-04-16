@@ -11,13 +11,19 @@ Live demo: [jimyag.com](https://jimyag.com)
 - Mermaid diagrams — fenced code block with `mermaid` language tag; click to open zoomable lightbox (scroll wheel, drag, keyboard shortcuts)
 - Image lightbox — click any image in a post to preview with zoom controls
 - Code copy button — appears on hover over any highlighted code block
+- Code block language label — language name shown in top-left corner of each code block
+- Reading progress bar — 3 px bar at the top of the viewport
 - Back to top button — appears after scrolling 300 px
 - Math rendering — MathJax loaded automatically only on pages that contain `$...$` or `\(...\)` expressions
 - Enhanced SEO — canonical URL, Open Graph, Twitter Card, schema.org structured data (WebSite, Person, BlogPosting, BreadcrumbList)
 - Auto image optimization — local images resized to max 1200 px width and converted to WebP at build time
-- Year-grouped post list with pinned posts at the top
+- Year-grouped post list with pinned posts at the top, pagination support
+- Prev/Next post navigation at the bottom of each post
 - Related posts section at the bottom of each post (matched by tags)
-- Word count and estimated reading time in the post header
+- Word count, estimated reading time, and last modified date in the post header
+- Callout and details shortcodes
+- Analytics — Plausible and Google Analytics 4 (opt-in, no script injected unless configured)
+- i18n — English and Chinese built-in, extensible to any language
 - Dark mode — automatic, follows system preference
 
 ## Installation
@@ -217,6 +223,98 @@ At the bottom of each post, up to 6 posts that share at least one tag are shown 
 ### Dark Mode
 
 The theme follows the OS/browser `prefers-color-scheme` preference. No toggle is provided; switching is handled automatically.
+
+### Prev/Next Post Navigation
+
+Each post page shows navigation links to the previous and next post within the same section (ordered by date). The links appear below the related posts section.
+
+### Last Modified Date
+
+If a post's `lastmod` date (set via git or explicitly in front matter) differs from its `date`, a "Last modified" line is shown below the reading time.
+
+To enable automatic `lastmod` from git commit history, add to `hugo.toml`:
+
+```toml
+[frontmatter]
+  lastmod = ["lastmod", ":git", "date"]
+```
+
+### Reading Progress Bar
+
+A 3 px bar at the top of the viewport shows reading progress on every page. It fills as the user scrolls and updates in real time.
+
+### Code Block Language Label
+
+A small language label (e.g. `go`, `bash`) is shown in the top-left corner of every syntax-highlighted code block. It reads the `data-lang` attribute set by Hugo's Chroma highlighter.
+
+### Callout Shortcode
+
+```markdown
+{{</* callout type="note" */>}}
+Informational note. Markdown is supported.
+{{</* /callout */>}}
+
+{{</* callout type="tip" title="Custom title" */>}}
+A helpful tip.
+{{</* /callout */>}}
+
+{{</* callout type="warning" */>}}
+Something to be cautious about.
+{{</* /callout */>}}
+
+{{</* callout type="danger" */>}}
+Critical warning.
+{{</* /callout */>}}
+```
+
+Available types: `note` (default), `tip`, `warning`, `danger`.
+
+### Details Shortcode
+
+```markdown
+{{</* details summary="Click to expand" */>}}
+Hidden content revealed on click.
+{{</* /details */>}}
+```
+
+### Pagination
+
+Set `paginate` in `hugo.toml` to control the number of posts per page:
+
+```toml
+paginate = 20
+```
+
+Pinned posts are always shown in full on every page and are not included in the paginator.
+
+### Analytics
+
+Plausible:
+
+```toml
+[params.analytics]
+  plausible = "yourdomain.com"
+```
+
+Google Analytics 4:
+
+```toml
+[params.analytics]
+  googleAnalyticsId = "G-XXXXXXXXXX"
+```
+
+Both can be set at the same time. Neither script is injected unless the corresponding key is present.
+
+### i18n
+
+The theme ships with English (`en`) and Chinese (`zh-CN`) translations. To use English:
+
+```toml
+languageCode = "en-US"
+defaultContentLanguage = "en"
+```
+
+To add another language, create `i18n/<code>.toml` in your site (not the theme) and translate the keys from `i18n/zh.toml`.
 
 ## Credits
 
