@@ -4,6 +4,7 @@ theme = "stark"
 title = "ᕕ( ᐛ )ᕗ My Blog"
 copyright = "Copyright © 2024, Your Name."
 languageCode = "zh-CN"
+paginate = 20
 
 enableRobotsTXT = true
 

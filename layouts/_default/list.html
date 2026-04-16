@@ -7,9 +7,8 @@
   </small>
   {{ end }}
 
-  {{/* Pinned posts */}}
-  {{ $pinned := where .Pages "Params.pinned" true }}
-  {{/* Regular posts */}}
+  {{/* Pinned posts — always shown, not paginated */}}
+  {{ $pinned  := where .Pages "Params.pinned" true }}
   {{ $regular := where .Pages "Params.pinned" "!=" true }}
 
   {{ with $pinned }}
@@ -18,13 +17,7 @@
     <ul class="blog-posts">
       {{ range sort . "Weight" }}
       <li>
-        <span>
-          <i>
-            <time datetime='{{ .Date.Format "2006-01-02" }}' pubdate>
-              {{ .Date.Format "2006-01-02" }}
-            </time>
-          </i>
-        </span>
+        <span><i><time datetime='{{ .Date.Format "2006-01-02" }}' pubdate>{{ .Date.Format "2006-01-02" }}</time></i></span>
         <a href="{{ .Permalink }}">{{ .Title }}</a>
       </li>
       {{ end }}
@@ -32,20 +25,16 @@
   </div>
   {{ end }}
 
-  {{ $byYear := $regular.GroupByDate "2006" }}
+  {{/* Paginate regular posts */}}
+  {{ $paginator := .Paginate $regular }}
+  {{ $byYear := $paginator.Pages.GroupByDate "2006" }}
   {{ range $byYear }}
   <div class="year-section">
     <h3 class="year-header">{{ .Key }} <span class="year-count">({{ len .Pages }})</span></h3>
     <ul class="blog-posts">
       {{ range .Pages }}
       <li>
-        <span>
-          <i>
-            <time datetime='{{ .Date.Format "2006-01-02" }}' pubdate>
-              {{ .Date.Format "2006-01-02" }}
-            </time>
-          </i>
-        </span>
+        <span><i><time datetime='{{ .Date.Format "2006-01-02" }}' pubdate>{{ .Date.Format "2006-01-02" }}</time></i></span>
         <a href="{{ .Permalink }}">{{ .Title }}</a>
       </li>
       {{ end }}
@@ -53,10 +42,33 @@
   </div>
   {{ end }}
 
-  {{ if and (not $pinned) (not $regular) }}
-  <ul class="blog-posts">
-    <li>{{ i18n "no_posts" }}</li>
-  </ul>
+  {{ if and (not $pinned) (eq $paginator.TotalPages 0) }}
+  <ul class="blog-posts"><li>{{ i18n "no_posts" }}</li></ul>
+  {{ end }}
+
+  {{/* Pagination controls */}}
+  {{ if gt $paginator.TotalPages 1 }}
+  <nav class="pagination">
+    {{ if $paginator.HasPrev }}
+    <a href="{{ $paginator.Prev.URL }}">←</a>
+    {{ else }}
+    <span class="page-disabled">←</span>
+    {{ end }}
+
+    {{ range $paginator.Pagers }}
+    {{ if eq . $paginator }}
+    <span class="page-current">{{ .PageNumber }}</span>
+    {{ else }}
+    <a href="{{ .URL }}">{{ .PageNumber }}</a>
+    {{ end }}
+    {{ end }}
+
+    {{ if $paginator.HasNext }}
+    <a href="{{ $paginator.Next.URL }}">→</a>
+    {{ else }}
+    <span class="page-disabled">→</span>
+    {{ end }}
+  </nav>
   {{ end }}
 
   {{ if .Data.Singular }}
