@@ -1,0 +1,17 @@
+{{- with .Site.Params.analytics -}}
+
+{{- with .plausible -}}
+<script defer data-domain="{{ . }}" src="https://plausible.io/js/script.js"></script>
+{{- end -}}
+
+{{- with .googleAnalyticsId -}}
+<script async src="https://www.googletagmanager.com/gtag/js?id={{ . }}"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', {{ . | jsonify }});
+</script>
+{{- end -}}
+
+{{- end -}}

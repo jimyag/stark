@@ -43,6 +43,11 @@ hideMadeWithLine = false
   # stackoverflow = "https://stackoverflow.com/users/..."
   # twitter       = "your-twitter-handle"
 
+# Analytics — uncomment one
+# [params.analytics]
+#   plausible          = "example.com"      # Plausible domain
+#   # googleAnalyticsId = "G-XXXXXXXXXX"    # Google Analytics 4 ID
+
 [markup]
   [markup.goldmark]
     [markup.goldmark.renderer]
