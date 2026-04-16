@@ -573,17 +573,57 @@
             gap: 6px;
             padding: 6px 8px;
         }
-        
+
         .mermaid-lightbox-controls button {
             width: 38px;
             height: 38px;
             font-size: 22px;
         }
-        
+
         #mermaid-lightbox-container {
             padding: 1rem;
             max-width: 98vw;
         }
+    }
+
+    /* 上一篇 / 下一篇导航 */
+    .post-nav {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        margin-top: 2.5rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid #eee;
+        font-size: 0.9rem;
+    }
+    .post-nav a {
+        max-width: 48%;
+        color: var(--text, #444);
+        text-decoration: none;
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+    .post-nav a:hover .post-nav-title {
+        text-decoration: underline;
+    }
+    .post-nav-label {
+        font-size: 0.78rem;
+        color: #888;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+    }
+    .post-nav-title {
+        font-weight: 500;
+        line-height: 1.4;
+    }
+    .post-nav-next {
+        text-align: right;
+        margin-left: auto;
+    }
+    @media (prefers-color-scheme: dark) {
+        .post-nav { border-top-color: #444; }
+        .post-nav-label { color: #aaa; }
     }
 </style>
 
