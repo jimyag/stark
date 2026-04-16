@@ -285,6 +285,24 @@
 </div>
 {{ end }}
 
+<!-- 阅读进度条 -->
+<div id="reading-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="{{ i18n "reading_progress_aria" }}"></div>
+<script>
+(function() {
+    const bar = document.getElementById('reading-progress');
+    if (!bar) return;
+    function update() {
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const pct = docHeight > 0 ? Math.min(100, Math.round(scrollTop / docHeight * 100)) : 0;
+        bar.style.width = pct + '%';
+        bar.setAttribute('aria-valuenow', pct);
+    }
+    window.addEventListener('scroll', update, { passive: true });
+    update();
+})();
+</script>
+
 <!-- 代码块复制按钮 -->
 <script>
 (function() {

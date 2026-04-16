@@ -1,6 +1,21 @@
 {{- partial "structured_data.html" . -}}
 
 <style>
+    /* 阅读进度条 */
+    #reading-progress {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 0%;
+        height: 3px;
+        background: #0b57d0;
+        z-index: 9999;
+        transition: width 0.1s linear;
+    }
+    @media (prefers-color-scheme: dark) {
+        #reading-progress { background: #9ecbff; }
+    }
+
     /* 加宽文章内容区域 */
     body {
         max-width: 900px;
