@@ -382,6 +382,23 @@
 })();
 </script>
 
+<!-- 代码块语言标签 -->
+<script>
+(function() {
+    document.querySelectorAll('.highlight').forEach(block => {
+        const code = block.querySelector('code[data-lang]');
+        if (!code) return;
+        const lang = code.getAttribute('data-lang');
+        if (!lang || lang === 'fallback') return;
+        const label = document.createElement('span');
+        label.className = 'code-lang';
+        label.textContent = lang;
+        block.style.position = 'relative';
+        block.appendChild(label);
+    });
+})();
+</script>
+
 <!-- 图片点击放大预览 -->
 <script>
 (function() {
