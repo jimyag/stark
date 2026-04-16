@@ -14,7 +14,7 @@
 
   {{ with $pinned }}
   <div class="pinned-section">
-    <h3 class="year-header">置顶</h3>
+    <h3 class="year-header">{{ i18n "pinned" }}</h3>
     <ul class="blog-posts">
       {{ range sort . "Weight" }}
       <li>
@@ -55,7 +55,7 @@
 
   {{ if and (not $pinned) (not $regular) }}
   <ul class="blog-posts">
-    <li>No posts yet</li>
+    <li>{{ i18n "no_posts" }}</li>
   </ul>
   {{ end }}
 

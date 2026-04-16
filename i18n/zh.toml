@@ -1,0 +1,80 @@
+[toc]
+other = "目录"
+
+[toc_show]
+other = "显示目录"
+
+[pinned]
+other = "置顶"
+
+[related_posts]
+other = "相关文章"
+
+[copy]
+other = "复制"
+
+[copied]
+other = "已复制!"
+
+[copy_failed]
+other = "失败"
+
+[back_to_top]
+other = "顶部"
+
+[back_to_top_aria]
+other = "返回顶部"
+
+[words_unit]
+other = "字"
+
+[approx]
+other = "约"
+
+[min_read]
+other = "分钟"
+
+[last_modified]
+other = "最后更新"
+
+[prev_post]
+other = "上一篇"
+
+[next_post]
+other = "下一篇"
+
+[reading_progress_aria]
+other = "阅读进度"
+
+[search_placeholder]
+other = "搜索文章、标签..."
+
+[search_no_results]
+other = "没有找到相关文章"
+
+[mermaid_zoom_in]
+other = "放大图表"
+
+[mermaid_zoom_out]
+other = "缩小图表"
+
+[mermaid_reset]
+other = "重置视图"
+
+[mermaid_close]
+other = "关闭图表预览"
+
+[image_zoom_in]
+other = "放大图片"
+
+[image_zoom_out]
+other = "缩小图片"
+
+[image_close]
+other = "关闭图片预览"
+
+[image_click_zoom]
+other = "点击放大图表"
+
+[no_posts]
+other = "暂无文章"

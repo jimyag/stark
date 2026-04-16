@@ -1,0 +1,80 @@
+[toc]
+other = "Table of Contents"
+
+[toc_show]
+other = "Show Table of Contents"
+
+[pinned]
+other = "Pinned"
+
+[related_posts]
+other = "Related posts"
+
+[copy]
+other = "Copy"
+
+[copied]
+other = "Copied!"
+
+[copy_failed]
+other = "Failed"
+
+[back_to_top]
+other = "Top"
+
+[back_to_top_aria]
+other = "Back to top"
+
+[words_unit]
+other = "words"
+
+[approx]
+other = "~"
+
+[min_read]
+other = "min read"
+
+[last_modified]
+other = "Last modified"
+
+[prev_post]
+other = "Previous"
+
+[next_post]
+other = "Next"
+
+[reading_progress_aria]
+other = "Reading progress"
+
+[search_placeholder]
+other = "Search posts, tags..."
+
+[search_no_results]
+other = "No results found"
+
+[mermaid_zoom_in]
+other = "Zoom in"
+
+[mermaid_zoom_out]
+other = "Zoom out"
+
+[mermaid_reset]
+other = "Reset view"
+
+[mermaid_close]
+other = "Close"
+
+[image_zoom_in]
+other = "Zoom in"
+
+[image_zoom_out]
+other = "Zoom out"
+
+[image_close]
+other = "Close"
+
+[image_click_zoom]
+other = "Click to zoom"
+
+[no_posts]
+other = "No posts yet"

@@ -8,7 +8,7 @@
         <time datetime='{{ .Date.Format "2006-01-02" }}' pubdate>
           {{ .Date.Format (default "02 Jan, 2006" .Site.Params.dateFormat) }}
         </time>
-        · {{ .WordCount }} 字 · 约 {{ .ReadingTime }} 分钟
+        · {{ .WordCount }} {{ i18n "words_unit" }} · {{ i18n "approx" }} {{ .ReadingTime }} {{ i18n "min_read" }}
       </i>
     </p>
     {{ end }}{{ end }}
@@ -31,7 +31,7 @@
     {{- end -}}
     {{- with $related -}}
     <section class="related-posts">
-      <h2>相关文章</h2>
+      <h2>{{ i18n "related_posts" }}</h2>
       <ul>
         {{- range . -}}
         <li><a href="{{ .Permalink }}">{{ .Title }}</a></li>

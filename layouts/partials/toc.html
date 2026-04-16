@@ -2,7 +2,7 @@
 <!-- Sidebar TOC (wide screen) -->
 <aside class="toc toc-sidebar">
   <details open>
-    <summary>目录</summary>
+    <summary>{{ i18n "toc" }}</summary>
     <nav>
       {{ .TableOfContents }}
     </nav>
@@ -10,13 +10,13 @@
 </aside>
 
 <!-- Floating TOC button (narrow screen) -->
-<button class="toc-toggle" aria-label="显示目录">目录</button>
+<button class="toc-toggle" aria-label="{{ i18n "toc_show" }}">{{ i18n "toc" }}</button>
 
 <!-- TOC modal panel (narrow screen) -->
 <div class="toc-modal">
   <div class="toc-modal-content">
     <div class="toc-modal-header">
-      <span>目录</span>
+      <span>{{ i18n "toc" }}</span>
       <button class="toc-modal-close">&times;</button>
     </div>
     <nav>

@@ -24,7 +24,7 @@
             el.style.cursor = 'pointer';
             el.style.transition = 'transform 0.2s';
             el.setAttribute('role', 'button');
-            el.setAttribute('aria-label', '点击放大图表');
+            el.setAttribute('aria-label', window.StarkI18n.imageClickZoom);
             el.setAttribute('tabindex', '0');
             
             el.addEventListener('click', (e) => {
@@ -277,10 +277,10 @@
 <div id="mermaid-lightbox" class="mermaid-lightbox" aria-hidden="true">
     <div id="mermaid-lightbox-container"></div>
     <div class="mermaid-lightbox-controls">
-        <button onclick="mermaidZoomOut()" aria-label="缩小图表">−</button>
-        <button onclick="mermaidResetView()" aria-label="重置视图">⟲</button>
-        <button onclick="mermaidZoomIn()" aria-label="放大图表">+</button>
-        <button onclick="closeMermaidLightbox()" aria-label="关闭图表预览">×</button>
+        <button onclick="mermaidZoomOut()" aria-label="{{ i18n "mermaid_zoom_out" }}">−</button>
+        <button onclick="mermaidResetView()" aria-label="{{ i18n "mermaid_reset" }}">⟲</button>
+        <button onclick="mermaidZoomIn()" aria-label="{{ i18n "mermaid_zoom_in" }}">+</button>
+        <button onclick="closeMermaidLightbox()" aria-label="{{ i18n "mermaid_close" }}">×</button>
     </div>
 </div>
 {{ end }}
@@ -292,7 +292,7 @@
         // 创建复制按钮
         const btn = document.createElement('button');
         btn.className = 'copy-btn';
-        btn.textContent = '复制';
+        btn.textContent = window.StarkI18n.copy;
         btn.setAttribute('aria-label', '复制代码');
 
         btn.addEventListener('click', async () => {
@@ -304,15 +304,15 @@
 
             try {
                 await navigator.clipboard.writeText(code);
-                btn.textContent = '已复制!';
+                btn.textContent = window.StarkI18n.copied;
                 btn.classList.add('copied');
                 setTimeout(() => {
-                    btn.textContent = '复制';
+                    btn.textContent = window.StarkI18n.copy;
                     btn.classList.remove('copied');
                 }, 2000);
             } catch (err) {
-                btn.textContent = '失败';
-                setTimeout(() => btn.textContent = '复制', 2000);
+                btn.textContent = window.StarkI18n.copyFailed;
+                setTimeout(() => btn.textContent = window.StarkI18n.copy, 2000);
             }
         });
 
@@ -324,7 +324,7 @@
 </script>
 
 <!-- 返回顶部按钮 -->
-<button id="back-to-top" aria-label="返回顶部" title="返回顶部">顶部</button>
+<button id="back-to-top" aria-label="{{ i18n "back_to_top_aria" }}" title="{{ i18n "back_to_top_aria" }}">{{ i18n "back_to_top" }}</button>
 <style>
 #back-to-top {
     position: fixed;
@@ -409,7 +409,7 @@
     const closeBtn = document.createElement('button');
     closeBtn.className = 'image-lightbox-close';
     closeBtn.type = 'button';
-    closeBtn.setAttribute('aria-label', '关闭图片预览');
+    closeBtn.setAttribute('aria-label', window.StarkI18n.imageClose);
     closeBtn.textContent = '×';
 
     const controls = document.createElement('div');
@@ -418,13 +418,13 @@
     const zoomOutBtn = document.createElement('button');
     zoomOutBtn.className = 'image-lightbox-zoom';
     zoomOutBtn.type = 'button';
-    zoomOutBtn.setAttribute('aria-label', '缩小图片');
+    zoomOutBtn.setAttribute('aria-label', window.StarkI18n.imageZoomOut);
     zoomOutBtn.textContent = '−';
 
     const zoomInBtn = document.createElement('button');
     zoomInBtn.className = 'image-lightbox-zoom';
     zoomInBtn.type = 'button';
-    zoomInBtn.setAttribute('aria-label', '放大图片');
+    zoomInBtn.setAttribute('aria-label', window.StarkI18n.imageZoomIn);
     zoomInBtn.textContent = '+';
 
     controls.appendChild(zoomOutBtn);

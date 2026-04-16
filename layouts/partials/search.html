@@ -1,7 +1,7 @@
 <!-- Search modal -->
 <div id="search-modal" style="display:none">
   <div id="search-box">
-    <input type="text" id="search-input" placeholder="Search posts, tags..." autocomplete="off">
+    <input type="text" id="search-input" placeholder="{{ i18n "search_placeholder" }}" autocomplete="off">
     <span id="search-close">&times;</span>
   </div>
   <ul id="search-results"></ul>
@@ -152,7 +152,7 @@
 
   function renderResults(items, words) {
     if (items.length === 0) {
-      results.innerHTML = '<li style="text-align:center;color:#666;padding:20px">No results found</li>';
+      results.innerHTML = `<li style="text-align:center;color:#666;padding:20px">${window.StarkI18n.searchNoResults}</li>`;
       return;
     }
 
