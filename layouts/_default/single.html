@@ -11,6 +11,13 @@
         · {{ .WordCount }} {{ i18n "words_unit" }} · {{ i18n "approx" }} {{ .ReadingTime }} {{ i18n "min_read" }}
       </i>
     </p>
+    {{- $displayDate := .Date -}}
+    {{- if .Lastmod -}}{{- $displayDate = .Lastmod -}}{{- end -}}
+    {{- if not (eq ($displayDate.Format "2006-01-02") (.Date.Format "2006-01-02")) -}}
+    <p class="post-lastmod">
+      <i>{{ i18n "last_modified" }}: <time datetime='{{ $displayDate.Format "2006-01-02" }}'>{{ $displayDate.Format (default "02 Jan, 2006" .Site.Params.dateFormat) }}</time></i>
+    </p>
+    {{- end -}}
     {{ end }}{{ end }}
     <content>
       {{ .Content }}

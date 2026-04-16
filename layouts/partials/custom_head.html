@@ -625,6 +625,16 @@
         .post-nav { border-top-color: #444; }
         .post-nav-label { color: #aaa; }
     }
+
+    /* 最后修改时间 */
+    .post-lastmod {
+        font-size: 0.82rem;
+        color: #888;
+        margin-top: 0.2rem;
+    }
+    @media (prefers-color-scheme: dark) {
+        .post-lastmod { color: #aaa; }
+    }
 </style>
 
 {{- $hasMath := false -}}
