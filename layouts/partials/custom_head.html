@@ -1,0 +1,611 @@
+{{- partial "structured_data.html" . -}}
+
+<style>
+    /* 加宽文章内容区域 */
+    body {
+        max-width: 900px;
+    }
+
+    /* 表格样式 */
+    table {
+        border-collapse: collapse;
+        margin: 1rem 0;
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    table th,
+    table td {
+        border: 1px solid #ddd;
+        padding: 8px 12px;
+        text-align: left;
+    }
+    table th {
+        background-color: #f5f5f5;
+        font-weight: 600;
+    }
+    table tr:nth-child(even) {
+        background-color: #fafafa;
+    }
+    @media (prefers-color-scheme: dark) {
+        table th,
+        table td {
+            border-color: #444;
+        }
+        table th {
+            background-color: #2a2a2a;
+        }
+        table tr:nth-child(even) {
+            background-color: #2a2a2a;
+        }
+    }
+
+    a {
+        color: #0b57d0;
+        text-decoration: underline;
+        text-underline-offset: 0.14em;
+        text-decoration-thickness: 0.08em;
+        text-decoration-skip-ink: auto;
+    }
+    a:visited {
+        color: #5b2aa6;
+    }
+    a:hover {
+        text-decoration-thickness: 0.12em;
+    }
+    a:focus-visible,
+    button:focus-visible,
+    input:focus-visible,
+    summary:focus-visible {
+        outline: 3px solid #0b57d0;
+        outline-offset: 2px;
+        border-radius: 2px;
+    }
+    .title,
+    nav a,
+    nav .search-trigger,
+    .toc nav a,
+    .toc-modal nav a {
+        text-decoration: none;
+    }
+    nav .search-trigger {
+        margin-right: 10px;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        color: inherit;
+        font: inherit;
+        cursor: pointer;
+    }
+    nav a:hover,
+    nav .search-trigger:hover,
+    .toc nav a:hover,
+    .toc-modal nav a:hover {
+        text-decoration: underline;
+    }
+
+    /* 文章布局 - 目录不影响正文宽度 */
+    .article-wrapper {
+        position: relative;
+    }
+    .article-wrapper > article {
+        width: 100%;
+    }
+
+    /* 目录样式 - 固定定位在左侧空白区域 */
+    .toc {
+        position: fixed;
+        left: max(1rem, calc((100vw - 900px) / 2 - 240px));
+        top: 6rem;
+        width: 220px;
+        max-height: calc(100vh - 8rem);
+        overflow-y: auto;
+        font-size: 0.85rem;
+    }
+    .toc summary {
+        font-weight: bold;
+        cursor: pointer;
+        margin-bottom: 0.5rem;
+        list-style: none;
+    }
+    .toc summary::-webkit-details-marker {
+        display: none;
+    }
+    .toc summary::before {
+        content: "▸ ";
+    }
+    .toc details[open] summary::before {
+        content: "▾ ";
+    }
+    .toc nav ul {
+        padding-left: 1rem;
+        margin: 0;
+        list-style: none;
+    }
+    .toc nav > ul {
+        padding-left: 0;
+    }
+    .toc nav li {
+        margin: 0.4rem 0;
+        line-height: 1.4;
+    }
+    .toc nav a {
+        color: var(--text, #333);
+        text-decoration: none;
+        display: block;
+    }
+    .toc nav a:hover {
+        text-decoration: underline;
+    }
+
+    /* 窄屏时隐藏侧边栏目录，显示浮动按钮 */
+    .toc-toggle {
+        display: none;
+    }
+    .toc-modal {
+        display: none;
+    }
+
+    @media (max-width: 1400px) {
+        .toc-sidebar {
+            display: none;
+        }
+        .toc-toggle {
+            display: block;
+            position: fixed;
+            bottom: 2rem;
+            right: 1.5rem;
+            padding: 10px 16px;
+            font-size: 14px;
+            color: #fff;
+            background: #333;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            z-index: 1000;
+        }
+        .toc-toggle:hover {
+            background: #555;
+        }
+        .toc-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            z-index: 2000;
+            justify-content: center;
+            align-items: flex-end;
+        }
+        .toc-modal.active {
+            display: flex;
+        }
+        .toc-modal-content {
+            background: var(--bg, #fff);
+            width: 100%;
+            max-height: 70vh;
+            overflow-y: auto;
+            border-radius: 16px 16px 0 0;
+            padding: 0;
+        }
+        .toc-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.2rem;
+            border-bottom: 1px solid var(--border, #eee);
+            font-weight: bold;
+            position: sticky;
+            top: 0;
+            background: var(--bg, #fff);
+        }
+        .toc-modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text, #666);
+            line-height: 1;
+        }
+        .toc-modal nav {
+            padding: 1rem 1.2rem;
+        }
+        .toc-modal nav ul {
+            padding-left: 1rem;
+            margin: 0;
+            list-style: none;
+        }
+        .toc-modal nav > ul {
+            padding-left: 0;
+        }
+        .toc-modal nav li {
+            margin: 0.6rem 0;
+        }
+        .toc-modal nav a {
+            color: var(--text, #333);
+            text-decoration: none;
+            display: block;
+            padding: 4px 0;
+        }
+    }
+
+    /* 深色模式目录样式 */
+    @media (prefers-color-scheme: dark) {
+        a {
+            color: #9ecbff;
+        }
+        a:visited {
+            color: #d7b3ff;
+        }
+        .toc nav a {
+            color: var(--text, #ddd);
+        }
+        .toc-toggle {
+            background: #555;
+        }
+        .toc-modal-content {
+            background: #1a1a1a;
+        }
+        .toc-modal-header {
+            background: #1a1a1a;
+            border-color: #333;
+        }
+        .toc-modal nav a {
+            color: #ddd;
+        }
+    }
+
+    /* 图片点击放大预览 */
+    main content img {
+        cursor: zoom-in;
+    }
+    .image-lightbox {
+        position: fixed;
+        inset: 0;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 1.2rem;
+        background: rgba(0, 0, 0, 0.82);
+        z-index: 4000;
+    }
+    .image-lightbox.active {
+        display: flex;
+    }
+    .image-lightbox img {
+        max-width: min(96vw, 1800px);
+        max-height: 92vh;
+        width: auto;
+        height: auto;
+        object-fit: contain;
+        border-radius: 6px;
+        box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
+        background: #fff;
+        transform-origin: center center;
+        transition: transform 0.12s ease-out;
+    }
+    .image-lightbox-controls {
+        position: fixed;
+        left: 50%;
+        bottom: 20px;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 8px;
+        padding: 8px 10px;
+        border-radius: 999px;
+        background: rgba(0, 0, 0, 0.38);
+    }
+    .image-lightbox-zoom,
+    .image-lightbox-close {
+        width: 42px;
+        height: 42px;
+        border: 0;
+        border-radius: 999px;
+        font-size: 26px;
+        line-height: 1;
+        cursor: pointer;
+        color: #fff;
+        background: rgba(0, 0, 0, 0.45);
+    }
+    .image-lightbox-zoom:hover,
+    .image-lightbox-close:hover {
+        background: rgba(0, 0, 0, 0.68);
+    }
+
+    /* 代码块样式优化 */
+    .highlight {
+        max-width: 100%;
+        overflow-x: auto;
+        margin: 1rem 0;
+        border-radius: 6px;
+    }
+    .highlight pre {
+        margin: 0;
+        padding: 1rem;
+        overflow-x: auto;
+    }
+    .highlight table {
+        width: 100%;
+        border-spacing: 0;
+        border-collapse: collapse;
+        table-layout: auto;
+    }
+    .highlight td {
+        padding: 0;
+        vertical-align: top;
+    }
+    /* 行号列 - 自适应宽度，禁止滚动 */
+    .highlight table td:first-child {
+        width: auto;
+        white-space: nowrap;
+        user-select: none;
+        overflow: hidden !important;
+    }
+    .highlight table td:first-child pre,
+    .highlight table td:first-child code {
+        padding-right: 0.8rem;
+        text-align: right;
+        color: #5c5c5c;
+        overflow: hidden !important;
+    }
+    /* 代码列 - 自适应宽度 */
+    .highlight table td:last-child {
+        width: 100%;
+    }
+    .highlight table td:last-child pre {
+        padding-left: 0;
+    }
+    /* 行号样式 */
+    .highlight .lnt, .highlight .ln {
+        color: #666;
+        padding-right: 0.8rem;
+    }
+    /* 代码内容不换行，支持横向滚动 */
+    .highlight code {
+        white-space: pre;
+        word-break: normal;
+        overflow-wrap: normal;
+    }
+    /* 内联代码样式 */
+    :not(pre) > code {
+        padding: 2px 6px;
+        background: #f0f0f0;
+        border-radius: 4px;
+        font-size: 0.9em;
+    }
+    @media (prefers-color-scheme: dark) {
+        :not(pre) > code {
+            background: #3a3a3a;
+        }
+    }
+
+    /* 代码块复制按钮 */
+    .copy-btn {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        padding: 4px 10px;
+        font-size: 12px;
+        color: #ccc;
+        background: #444;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        opacity: 0;
+        transition: opacity 0.2s, background 0.2s;
+        z-index: 10;
+    }
+    .highlight:hover .copy-btn {
+        opacity: 1;
+    }
+    .copy-btn:hover {
+        background: #555;
+        color: #fff;
+    }
+    .copy-btn.copied {
+        background: #2ecc71;
+        color: #fff;
+    }
+
+    /* 博客列表年份分组样式 */
+    .year-section,
+    .pinned-section {
+        margin-bottom: 2rem;
+    }
+    .year-header {
+        margin: 0 0 0.5rem 0;
+        padding-bottom: 0.3rem;
+        border-bottom: 1px solid #eee;
+        font-size: 1.2rem;
+        color: #666;
+    }
+    .pinned-section .year-header {
+        color: #e67e22;
+    }
+    .year-count {
+        font-size: 0.85rem;
+        font-weight: normal;
+        color: #666;
+    }
+    @media (prefers-color-scheme: dark) {
+        .year-header {
+            border-bottom-color: #444;
+            color: #aaa;
+        }
+        .pinned-section .year-header {
+            color: #f39c12;
+        }
+    }
+
+    /* Mermaid 图表优化 */
+    .mermaid {
+        background-color: transparent !important;
+        cursor: pointer;
+        padding: 0.5rem;
+        border-radius: 4px;
+        transition: background-color 0.2s, transform 0.2s;
+    }
+    
+    .mermaid:hover {
+        background-color: rgba(0, 123, 255, 0.05) !important;
+        transform: translateY(-1px);
+    }
+    
+    .mermaid:focus {
+        outline: 2px solid #0b57d0;
+        outline-offset: 2px;
+    }
+    
+    @media (prefers-color-scheme: dark) {
+        .mermaid:hover {
+            background-color: rgba(74, 158, 255, 0.1) !important;
+        }
+    }
+
+    /* 改善线条颜色和对比度 */
+    .mermaid .er .entityBox {
+        stroke: #4a9eff !important;
+        stroke-width: 2px !important;
+    }
+
+    .mermaid .er .relationshipLabelBox {
+        stroke: #ff6b6b !important;
+        stroke-width: 2px !important;
+    }
+
+    .mermaid .er .relationshipLine {
+        stroke: #4ecdc4 !important;
+        stroke-width: 2px !important;
+    }
+
+    /* 改善文本可读性 */
+    .mermaid .er .label {
+        fill: #ffffff !important;
+        color: #ffffff !important;
+    }
+
+    /* 改善连接线 */
+    .mermaid .er .relationship {
+        stroke: #4ecdc4 !important;
+        stroke-width: 2px !important;
+    }
+    
+    /* Mermaid Lightbox 样式 - 参考图片 lightbox */
+    .mermaid-lightbox {
+        position: fixed;
+        inset: 0;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+        background: rgba(0, 0, 0, 0.82);
+        z-index: 10000;
+    }
+    
+    .mermaid-lightbox.active {
+        display: flex;
+    }
+    
+    #mermaid-lightbox-container {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #fff;
+        border-radius: 8px;
+        overflow: hidden;
+        user-select: none;
+        -webkit-user-select: none;
+    }
+    
+    #mermaid-lightbox-container svg {
+        display: block;
+        max-width: 100%;
+        max-height: 100%;
+        width: auto;
+        height: auto;
+        object-fit: contain;
+        transform-origin: center center;
+        transition: transform 0.12s ease-out;
+        pointer-events: none;
+    }
+    
+    .mermaid-lightbox-controls {
+        position: fixed;
+        left: 50%;
+        bottom: 20px;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 8px;
+        padding: 8px 10px;
+        border-radius: 999px;
+        background: rgba(0, 0, 0, 0.38);
+        z-index: 10001;
+    }
+    
+    .mermaid-lightbox-controls button {
+        width: 42px;
+        height: 42px;
+        border: 0;
+        border-radius: 999px;
+        font-size: 26px;
+        line-height: 1;
+        cursor: pointer;
+        color: #fff;
+        background: rgba(0, 0, 0, 0.45);
+        transition: background 0.2s;
+    }
+    
+    .mermaid-lightbox-controls button:hover {
+        background: rgba(0, 0, 0, 0.68);
+    }
+    
+    .mermaid-lightbox-controls button:focus {
+        outline: 2px solid #0b57d0;
+        outline-offset: 2px;
+    }
+    
+    @media (max-width: 768px) {
+        .mermaid-lightbox-controls {
+            bottom: 15px;
+            gap: 6px;
+            padding: 6px 8px;
+        }
+        
+        .mermaid-lightbox-controls button {
+            width: 38px;
+            height: 38px;
+            font-size: 22px;
+        }
+        
+        #mermaid-lightbox-container {
+            padding: 1rem;
+            max-width: 98vw;
+        }
+    }
+</style>
+
+{{- $hasMath := false -}}
+{{- if .IsPage -}}
+  {{- if or (gt (len (findRE "\\$[^\\$]+\\$" .RawContent)) 0) (gt (len (findRE "\\\\\\(" .RawContent)) 0) (gt (len (findRE "\\\\\\[" .RawContent)) 0) -}}
+    {{- $hasMath = true -}}
+  {{- end -}}
+{{- end -}}
+{{- if $hasMath -}}
+<script>
+    MathJax = {
+        tex: {
+            inlineMath: [
+                ['$', '$'],
+                ['\\(', '\\)'],
+            ],
+        },
+        svg: {
+            fontCache: 'global',
+        },
+    };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+{{- end -}}

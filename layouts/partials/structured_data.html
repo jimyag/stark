@@ -1,0 +1,96 @@
+{{- $siteName := .Site.Title -}}
+{{- $siteURL := .Site.BaseURL -}}
+{{- $authorName := .Site.Params.author.name | default "" -}}
+{{- $defaultDescription := .Site.Params.description | default "" -}}
+
+{{- $webSite := dict
+  "@context" "https://schema.org"
+  "@type" "WebSite"
+  "name" $siteName
+  "url" $siteURL
+-}}
+<script type="application/ld+json">{{ $webSite | jsonify | safeJS }}</script>
+
+{{- if $authorName -}}
+{{- $sameAs := slice -}}
+{{- with .Site.Params.social.github -}}
+  {{- $sameAs = $sameAs | append (printf "https://github.com/%s" .) -}}
+{{- end -}}
+{{- with .Site.Params.social.stackoverflow -}}
+  {{- $sameAs = $sameAs | append . -}}
+{{- end -}}
+{{- with .Site.Params.social.twitter -}}
+  {{- $sameAs = $sameAs | append (printf "https://twitter.com/%s" .) -}}
+{{- end -}}
+{{- $person := dict
+  "@context" "https://schema.org"
+  "@type" "Person"
+  "name" $authorName
+  "url" $siteURL
+-}}
+{{- if gt (len $sameAs) 0 -}}
+  {{- $person = merge $person (dict "sameAs" $sameAs) -}}
+{{- end -}}
+<script type="application/ld+json">{{ $person | jsonify | safeJS }}</script>
+{{- end -}}
+
+{{- if .IsPage -}}
+  {{- $description := $defaultDescription -}}
+  {{- with .Description -}}
+    {{- $description = . | plainify | htmlUnescape | replaceRE "\\s+" " " | strings.TrimSpace -}}
+  {{- else -}}
+    {{- $plain := .Plain | htmlUnescape | replaceRE "\\s+" " " | strings.TrimSpace -}}
+    {{- if gt (len $plain) 0 -}}
+      {{- $description = $plain -}}
+    {{- end -}}
+  {{- end -}}
+  {{- if gt (len $description) 140 -}}
+    {{- $description = $description | truncate 140 -}}
+  {{- end -}}
+
+  {{- $image := "" -}}
+  {{- with .Params.images -}}
+    {{- $image = (index . 0) | absURL -}}
+  {{- else -}}
+    {{- with .Site.Params.images -}}
+      {{- $image = (index . 0) | absURL -}}
+    {{- end -}}
+  {{- end -}}
+
+  {{- $blogPosting := dict
+    "@context" "https://schema.org"
+    "@type" "BlogPosting"
+    "headline" .Title
+    "description" $description
+    "datePublished" (.Date.Format "2006-01-02T15:04:05-07:00")
+    "dateModified" (.Lastmod.Format "2006-01-02T15:04:05-07:00")
+    "mainEntityOfPage" .Permalink
+    "author" (dict "@type" "Person" "name" $authorName)
+    "publisher" (dict "@type" "Person" "name" $authorName)
+  -}}
+  {{- if ne $image "" -}}
+    {{- $blogPosting = merge $blogPosting (dict "image" $image) -}}
+  {{- end -}}
+  <script type="application/ld+json">{{ $blogPosting | jsonify | safeJS }}</script>
+{{- end -}}
+
+{{- $breadcrumbElements := slice
+  (dict
+    "@type" "ListItem"
+    "position" 1
+    "name" "Home"
+    "item" $siteURL
+  )
+  (dict
+    "@type" "ListItem"
+    "position" 2
+    "name" (or .Title $siteName)
+    "item" .Permalink
+  )
+-}}
+{{- $breadcrumbs := dict
+  "@context" "https://schema.org"
+  "@type" "BreadcrumbList"
+  "itemListElement" $breadcrumbElements
+-}}
+<script type="application/ld+json">{{ $breadcrumbs | jsonify | safeJS }}</script>

@@ -1,0 +1,25 @@
+{{- $alt := .Text | default .Title | default "image" -}}
+{{- $src := .Destination | safeURL -}}
+{{- $scratch := newScratch -}}
+{{- $scratch.Set "processed" "" -}}
+
+{{- if and .Page (not (or (strings.HasPrefix .Destination "http://") (strings.HasPrefix .Destination "https://") (strings.HasPrefix .Destination "//"))) -}}
+  {{- $img := .Page.Resources.GetMatch .Destination -}}
+  {{- if not $img -}}
+    {{- $img = .Page.Resources.GetMatch (printf "**%s" (path.Base .Destination)) -}}
+  {{- end -}}
+  {{- if and $img (or (eq $img.MediaType.SubType "jpeg") (eq $img.MediaType.SubType "jpg") (eq $img.MediaType.SubType "png") (eq $img.MediaType.SubType "webp")) -}}
+    {{- $scratch.Set "processed" ($img.Resize "1200x webp") -}}
+  {{- end -}}
+{{- end -}}
+{{- $processed := $scratch.Get "processed" -}}
+{{- $finalSrc := $src -}}
+{{- $finalWidth := "" -}}
+{{- $finalHeight := "" -}}
+{{- if $processed -}}
+  {{- $finalSrc = $processed.RelPermalink -}}
+  {{- $finalWidth = printf "%d" $processed.Width -}}
+  {{- $finalHeight = printf "%d" $processed.Height -}}
+{{- end -}}
+
+<img src="{{ $finalSrc }}"{{ with $finalWidth }} width="{{ . }}"{{ end }}{{ with $finalHeight }} height="{{ . }}"{{ end }} alt="{{ $alt | plainify }}"{{ with .Title }} title="{{ . }}"{{ end }} loading="lazy" decoding="async" />

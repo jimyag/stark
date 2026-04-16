@@ -1,0 +1,46 @@
+{{ define "main" }}
+<div class="article-wrapper">
+  <article>
+    {{ if eq .Type "blog" }}{{ if not .Params.menu }}
+    <h1>{{ .Title }}</h1>
+    <p>
+      <i>
+        <time datetime='{{ .Date.Format "2006-01-02" }}' pubdate>
+          {{ .Date.Format (default "02 Jan, 2006" .Site.Params.dateFormat) }}
+        </time>
+        · {{ .WordCount }} 字 · 约 {{ .ReadingTime }} 分钟
+      </i>
+    </p>
+    {{ end }}{{ end }}
+    <content>
+      {{ .Content }}
+    </content>
+    <p>
+      {{ range (.GetTerms "tags") }}
+      <a href="{{ .Permalink }}">#{{ .LinkTitle }}</a>
+      {{ end }}
+    </p>
+
+    {{- $related := slice -}}
+    {{- $tags := .Params.tags | default (slice) -}}
+    {{- if gt (len $tags) 0 -}}
+      {{- $related = where .Site.RegularPages "Type" "blog" -}}
+      {{- $related = where $related "Permalink" "ne" .Permalink -}}
+      {{- $related = where $related "Params.tags" "intersect" $tags -}}
+      {{- $related = first 6 $related -}}
+    {{- end -}}
+    {{- with $related -}}
+    <section class="related-posts">
+      <h2>相关文章</h2>
+      <ul>
+        {{- range . -}}
+        <li><a href="{{ .Permalink }}">{{ .Title }}</a></li>
+        {{- end -}}
+      </ul>
+    </section>
+    {{- end -}}
+  </article>
+
+  {{- partial "toc.html" . -}}
+</div>
+{{ end }}

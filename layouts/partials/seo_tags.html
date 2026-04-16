@@ -1,0 +1,66 @@
+{{- $title := .Site.Title -}}
+{{- with .Title -}}
+  {{- $title = . -}}
+{{- end -}}
+{{- $description := .Site.Params.description | default "" -}}
+{{- if .Description -}}
+  {{- $description = .Description | plainify | htmlUnescape | replaceRE "\\s+" " " | strings.TrimSpace -}}
+{{- else if .IsPage -}}
+  {{- $plain := .Plain | htmlUnescape | replaceRE "\\s+" " " | strings.TrimSpace -}}
+  {{- if gt (len $plain) 0 -}}
+    {{- $description = $plain -}}
+  {{- end -}}
+{{- end -}}
+{{- if gt (len $description) 140 -}}
+  {{- $description = $description | truncate 140 -}}
+{{- end -}}
+{{- $shareImage := "" -}}
+{{- with .Params.images -}}
+  {{- $shareImage = (index . 0) | absURL -}}
+{{- else -}}
+  {{- with .Site.Params.images -}}
+    {{- $shareImage = (index . 0) | absURL -}}
+  {{- end -}}
+{{- end -}}
+{{- $robots := "index,follow" -}}
+{{- if or (eq .Kind "taxonomy") (eq .Kind "term") -}}
+  {{- $robots = "noindex,follow" -}}
+{{- end -}}
+
+<!-- Primary Meta Tags -->
+<meta name="title" content="{{ $title }}" />
+<meta name="description" content="{{ $description }}" />
+<meta name="keywords" content="{{ if .IsPage}}{{ range $index, $tag := .Params.tags }}{{ $tag }},{{ end }}{{ else }}{{ range $plural, $terms := .Site.Taxonomies }}{{ range $term, $val := $terms }}{{ printf "%s," $term }}{{ end }}{{ end }}{{ end }}" />
+<link rel="canonical" href="{{ .Permalink }}" />
+<meta name="robots" content="{{ $robots }}" />
+
+<!-- Open Graph -->
+<meta property="og:url" content="{{ .Permalink }}" />
+<meta property="og:site_name" content="{{ .Site.Title }}" />
+<meta property="og:title" content="{{ $title }}" />
+<meta property="og:description" content="{{ $description }}" />
+<meta property="og:locale" content="{{ .Site.Params.ogLocale | default "en_US" }}" />
+<meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}" />
+{{- if ne $shareImage "" -}}
+<meta property="og:image" content="{{ $shareImage }}" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+{{- end -}}
+{{- if .IsPage -}}
+<meta property="article:published_time" content="{{ .Date.Format "2006-01-02T15:04:05-07:00" }}" />
+<meta property="article:modified_time" content="{{ .Lastmod.Format "2006-01-02T15:04:05-07:00" }}" />
+{{- range (.GetTerms "tags") -}}
+<meta property="article:tag" content="{{ .LinkTitle }}" />
+{{- end -}}
+{{- end -}}
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="{{ $title }}" />
+<meta name="twitter:description" content="{{ $description }}" />
+{{- if ne $shareImage "" -}}
+<meta name="twitter:image" content="{{ $shareImage }}" />
+{{- end -}}
+
+<!-- Microdata -->
+{{ template "_internal/schema.html" . }}

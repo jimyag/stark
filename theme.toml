@@ -1,0 +1,16 @@
+name = "Stark"
+license = "MIT"
+licenselink = "https://github.com/jimyag/stark/blob/main/LICENSE"
+description = "A minimal Hugo blog theme with TOC, full-text search, Mermaid diagrams, image lightbox, and enhanced SEO. Based on hugo-bearblog."
+homepage = "https://github.com/jimyag/stark"
+tags = ["blog", "minimal", "seo", "toc", "search", "mermaid", "dark mode", "fast", "clean"]
+features = ["favicon", "seo", "toc", "full-text search", "mermaid", "image lightbox", "rss", "dark mode", "copy code button", "back to top"]
+min_version = "v0.110.0"
+
+[author]
+  name = "jimyag"
+  homepage = "https://jimyag.com"
+
+[original]
+  name = "Hugo Bear Blog"
+  homepage = "https://github.com/janraasch/hugo-bearblog"

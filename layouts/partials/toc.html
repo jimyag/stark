@@ -1,0 +1,57 @@
+{{ if and .TableOfContents (gt (len .TableOfContents) 100) }}
+<!-- Sidebar TOC (wide screen) -->
+<aside class="toc toc-sidebar">
+  <details open>
+    <summary>目录</summary>
+    <nav>
+      {{ .TableOfContents }}
+    </nav>
+  </details>
+</aside>
+
+<!-- Floating TOC button (narrow screen) -->
+<button class="toc-toggle" aria-label="显示目录">目录</button>
+
+<!-- TOC modal panel (narrow screen) -->
+<div class="toc-modal">
+  <div class="toc-modal-content">
+    <div class="toc-modal-header">
+      <span>目录</span>
+      <button class="toc-modal-close">&times;</button>
+    </div>
+    <nav>
+      {{ .TableOfContents }}
+    </nav>
+  </div>
+</div>
+
+<script>
+(function() {
+  const toggle = document.querySelector('.toc-toggle');
+  const modal = document.querySelector('.toc-modal');
+  const closeBtn = document.querySelector('.toc-modal-close');
+
+  if (!toggle || !modal) return;
+
+  toggle.addEventListener('click', () => {
+    modal.classList.add('active');
+  });
+
+  closeBtn.addEventListener('click', () => {
+    modal.classList.remove('active');
+  });
+
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      modal.classList.remove('active');
+    }
+  });
+
+  modal.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      modal.classList.remove('active');
+    });
+  });
+})();
+</script>
+{{ end }}

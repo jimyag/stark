@@ -1,0 +1,50 @@
+baseURL = "https://example.com"
+
+theme = "stark"
+title = "My Blog"
+copyright = "Copyright © 2024, Your Name."
+languageCode = "en-US"
+
+enableRobotsTXT = true
+
+disableKinds = ["taxonomy"]
+ignoreErrors = ["error-disable-taxonomy", "warning-goldmark-raw-html"]
+
+[permalinks]
+blog = "/posts/:slug/"
+tags = "/blog/:slug"
+
+[[menu.main]]
+  name = "RSS"
+  url = "/index.xml"
+  weight = 2
+
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
+
+[params]
+description = "A minimal Hugo blog"
+favicon = "images/favicon.png"
+dateFormat = "2006-01-02"
+# hideMadeWithLine = true
+
+# ogLocale = "en_US"
+
+[params.author]
+  name = "Your Name"
+  email = "you@example.com"
+
+# Social links for structured data (schema.org Person)
+[params.social]
+  github = "your-github-username"
+  # stackoverflow = "https://stackoverflow.com/users/..."
+  # twitter = "your-twitter-handle"
+
+[markup]
+  [markup.highlight]
+    lineNos = true
+    lineNumbersInTable = true
+    style = "monokai"
+  [markup.tableOfContents]
+    startLevel = 2
+    endLevel = 4

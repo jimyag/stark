@@ -1,0 +1,493 @@
+{{ if .Store.Get "hasMermaid" }}
+<script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
+    
+    mermaid.initialize({
+        startOnLoad: true,
+        theme: 'forest',
+        securityLevel: 'loose',
+        flowchart: {
+            useMaxWidth: true,
+            htmlLabels: true
+        },
+        er: {
+            useMaxWidth: true
+        }
+    });
+    
+    // 为 mermaid 图表添加点击放大功能
+    function addMermaidClickHandlers() {
+        document.querySelectorAll('.mermaid').forEach((el) => {
+            if (el.dataset.clickHandlerAdded) return;
+            el.dataset.clickHandlerAdded = 'true';
+            
+            el.style.cursor = 'pointer';
+            el.style.transition = 'transform 0.2s';
+            el.setAttribute('role', 'button');
+            el.setAttribute('aria-label', '点击放大图表');
+            el.setAttribute('tabindex', '0');
+            
+            el.addEventListener('click', (e) => {
+                e.preventDefault();
+                openMermaidLightbox(el);
+            });
+            
+            el.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    openMermaidLightbox(el);
+                }
+            });
+        });
+    }
+    
+    function openMermaidLightbox(mermaidEl) {
+        const lightbox = document.getElementById('mermaid-lightbox');
+        const container = document.getElementById('mermaid-lightbox-container');
+        const svg = mermaidEl.querySelector('svg');
+        
+        if (!svg) return;
+        
+        // 克隆 SVG
+        const clonedSvg = svg.cloneNode(true);
+        clonedSvg.style.width = '';
+        clonedSvg.style.height = '';
+        if (svg.getAttribute('viewBox')) {
+            clonedSvg.setAttribute('viewBox', svg.getAttribute('viewBox'));
+        }
+        container.innerHTML = '';
+        container.appendChild(clonedSvg);
+        
+        lightbox.classList.add('active');
+        lightbox.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        
+        // 重置状态
+        lightbox.dataset.zoom = '1';
+        lightbox.dataset.translateX = '0';
+        lightbox.dataset.translateY = '0';
+        currentX = 0;
+        currentY = 0;
+        container.style.cursor = 'default';
+        
+        updateMermaidTransform(lightbox, 1, 0, 0);
+    }
+    
+    function closeMermaidLightbox() {
+        const lightbox = document.getElementById('mermaid-lightbox');
+        lightbox.classList.remove('active');
+        lightbox.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        document.getElementById('mermaid-lightbox-container').innerHTML = '';
+        
+        // 重置拖拽状态
+        isDragging = false;
+        currentX = 0;
+        currentY = 0;
+    }
+    
+    function updateMermaidTransform(lightbox, zoom, x, y) {
+        const container = document.getElementById('mermaid-lightbox-container');
+        const svg = container.querySelector('svg');
+        if (svg) {
+            // 先位移后缩放，这样位移不会受缩放影响
+            svg.style.transform = `translate(${x}px, ${y}px) scale(${zoom})`;
+            svg.style.transformOrigin = 'center center';
+        }
+        lightbox.dataset.zoom = zoom;
+        lightbox.dataset.translateX = x;
+        lightbox.dataset.translateY = y;
+        
+        // 更新鼠标样式
+        container.style.cursor = zoom > 1 ? 'grab' : 'default';
+    }
+    
+    // 拖拽相关变量
+    let isDragging = false;
+    let startX = 0;
+    let startY = 0;
+    let currentX = 0;
+    let currentY = 0;
+    
+    // 使用事件委托处理拖拽和滚轮
+    document.addEventListener('mousedown', (e) => {
+        const container = document.getElementById('mermaid-lightbox-container');
+        if (!container || !container.contains(e.target)) return;
+        
+        const lightbox = document.getElementById('mermaid-lightbox');
+        const zoom = parseFloat(lightbox.dataset.zoom) || 1;
+        
+        if (zoom > 1) {
+            isDragging = true;
+            startX = e.clientX - currentX;
+            startY = e.clientY - currentY;
+            container.style.cursor = 'grabbing';
+            e.preventDefault();
+        }
+    });
+    
+    document.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        
+        const lightbox = document.getElementById('mermaid-lightbox');
+        if (!lightbox || !lightbox.classList.contains('active')) return;
+        
+        const zoom = parseFloat(lightbox.dataset.zoom) || 1;
+        
+        currentX = e.clientX - startX;
+        currentY = e.clientY - startY;
+        
+        updateMermaidTransform(lightbox, zoom, currentX, currentY);
+    });
+    
+    document.addEventListener('mouseup', () => {
+        if (isDragging) {
+            isDragging = false;
+            const container = document.getElementById('mermaid-lightbox-container');
+            const lightbox = document.getElementById('mermaid-lightbox');
+            if (lightbox && lightbox.classList.contains('active')) {
+                const zoom = parseFloat(lightbox.dataset.zoom) || 1;
+                container.style.cursor = zoom > 1 ? 'grab' : 'default';
+            }
+        }
+    });
+    
+    // 滚轮缩放
+    document.addEventListener('wheel', (e) => {
+        const container = document.getElementById('mermaid-lightbox-container');
+        if (!container || !container.contains(e.target)) return;
+        
+        const lightbox = document.getElementById('mermaid-lightbox');
+        if (!lightbox || !lightbox.classList.contains('active')) return;
+        
+        e.preventDefault();
+        
+        let zoom = parseFloat(lightbox.dataset.zoom) || 1;
+        const x = parseFloat(lightbox.dataset.translateX) || 0;
+        const y = parseFloat(lightbox.dataset.translateY) || 0;
+        
+        // 滚轮向上放大，向下缩小
+        if (e.deltaY < 0) {
+            zoom = Math.min(4, zoom + 0.1);
+        } else {
+            zoom = Math.max(0.5, zoom - 0.1);
+        }
+        
+        // 如果缩放回到1，重置位移
+        if (zoom <= 1) {
+            currentX = 0;
+            currentY = 0;
+            updateMermaidTransform(lightbox, zoom, 0, 0);
+        } else {
+            updateMermaidTransform(lightbox, zoom, x, y);
+        }
+    }, { passive: false });
+    
+    // 全局函数供按钮调用
+    window.mermaidZoomIn = function() {
+        const lightbox = document.getElementById('mermaid-lightbox');
+        let zoom = parseFloat(lightbox.dataset.zoom) || 1;
+        const x = parseFloat(lightbox.dataset.translateX) || 0;
+        const y = parseFloat(lightbox.dataset.translateY) || 0;
+        
+        zoom = Math.min(4, zoom + 0.2);
+        updateMermaidTransform(lightbox, zoom, x, y);
+    };
+    
+    window.mermaidZoomOut = function() {
+        const lightbox = document.getElementById('mermaid-lightbox');
+        let zoom = parseFloat(lightbox.dataset.zoom) || 1;
+        let x = parseFloat(lightbox.dataset.translateX) || 0;
+        let y = parseFloat(lightbox.dataset.translateY) || 0;
+        
+        zoom = Math.max(0.5, zoom - 0.2);
+        
+        // 如果缩放回到1，重置位移
+        if (zoom <= 1) {
+            x = 0;
+            y = 0;
+            currentX = 0;
+            currentY = 0;
+        }
+        
+        updateMermaidTransform(lightbox, zoom, x, y);
+    };
+    
+    window.mermaidResetView = function() {
+        const lightbox = document.getElementById('mermaid-lightbox');
+        currentX = 0;
+        currentY = 0;
+        updateMermaidTransform(lightbox, 1, 0, 0);
+    };
+    
+    window.closeMermaidLightbox = closeMermaidLightbox;
+    
+    // 监听 mermaid 渲染完成
+    const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            mutation.addedNodes.forEach((node) => {
+                if (node.nodeType === 1) {
+                    if (node.classList && node.classList.contains('mermaid')) {
+                        setTimeout(() => addMermaidClickHandlers(), 100);
+                    } else if (node.querySelectorAll) {
+                        const mermaids = node.querySelectorAll('.mermaid');
+                        if (mermaids.length > 0) {
+                            setTimeout(() => addMermaidClickHandlers(), 100);
+                        }
+                    }
+                }
+            });
+        });
+    });
+    
+    observer.observe(document.body, {
+        childList: true,
+        subtree: true
+    });
+    
+    // 页面加载后立即检查
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(addMermaidClickHandlers, 500);
+        });
+    } else {
+        setTimeout(addMermaidClickHandlers, 500);
+    }
+    
+    // 键盘事件支持
+    document.addEventListener('keydown', (e) => {
+        const lightbox = document.getElementById('mermaid-lightbox');
+        if (!lightbox || !lightbox.classList.contains('active')) return;
+        
+        if (e.key === 'Escape') {
+            closeMermaidLightbox();
+        } else if (e.key === ' ' || e.key === '0') {
+            // 空格键或0键重置视图
+            e.preventDefault();
+            mermaidResetView();
+        } else if (e.key === '+' || e.key === '=') {
+            mermaidZoomIn();
+        } else if (e.key === '-') {
+            mermaidZoomOut();
+        }
+    });
+</script>
+
+<!-- Mermaid Lightbox HTML -->
+<div id="mermaid-lightbox" class="mermaid-lightbox" aria-hidden="true">
+    <div id="mermaid-lightbox-container"></div>
+    <div class="mermaid-lightbox-controls">
+        <button onclick="mermaidZoomOut()" aria-label="缩小图表">−</button>
+        <button onclick="mermaidResetView()" aria-label="重置视图">⟲</button>
+        <button onclick="mermaidZoomIn()" aria-label="放大图表">+</button>
+        <button onclick="closeMermaidLightbox()" aria-label="关闭图表预览">×</button>
+    </div>
+</div>
+{{ end }}
+
+<!-- 代码块复制按钮 -->
+<script>
+(function() {
+    document.querySelectorAll('.highlight').forEach(block => {
+        // 创建复制按钮
+        const btn = document.createElement('button');
+        btn.className = 'copy-btn';
+        btn.textContent = '复制';
+        btn.setAttribute('aria-label', '复制代码');
+
+        btn.addEventListener('click', async () => {
+            // 获取代码内容（排除行号）
+            const codeEl = block.querySelector('td:last-child code') || block.querySelector('code');
+            if (!codeEl) return;
+
+            const code = codeEl.textContent;
+
+            try {
+                await navigator.clipboard.writeText(code);
+                btn.textContent = '已复制!';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.textContent = '复制';
+                    btn.classList.remove('copied');
+                }, 2000);
+            } catch (err) {
+                btn.textContent = '失败';
+                setTimeout(() => btn.textContent = '复制', 2000);
+            }
+        });
+
+        // 添加按钮到代码块
+        block.style.position = 'relative';
+        block.appendChild(btn);
+    });
+})();
+</script>
+
+<!-- 返回顶部按钮 -->
+<button id="back-to-top" aria-label="返回顶部" title="返回顶部">顶部</button>
+<style>
+#back-to-top {
+    position: fixed;
+    bottom: 2rem;
+    left: 2rem;
+    padding: 10px 16px;
+    font-size: 14px;
+    color: #fff;
+    background: #333;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+    z-index: 999;
+}
+#back-to-top:hover {
+    background: #555;
+}
+#back-to-top.visible {
+    opacity: 1;
+    visibility: visible;
+}
+/* 窄屏时避开目录按钮 */
+@media (max-width: 1400px) {
+    #back-to-top {
+        bottom: 5rem;
+        left: 1.5rem;
+    }
+}
+@media (prefers-color-scheme: dark) {
+    #back-to-top {
+        background: #555;
+    }
+}
+</style>
+<script>
+(function() {
+    const btn = document.getElementById('back-to-top');
+    const threshold = 300;
+
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > threshold) {
+            btn.classList.add('visible');
+        } else {
+            btn.classList.remove('visible');
+        }
+    }, { passive: true });
+
+    btn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+})();
+</script>
+
+<!-- 图片点击放大预览 -->
+<script>
+(function() {
+    const contentRoot = document.querySelector('main content');
+    if (!contentRoot) return;
+
+    const images = contentRoot.querySelectorAll('img');
+    if (!images.length) return;
+
+    const lightbox = document.createElement('div');
+    lightbox.className = 'image-lightbox';
+    lightbox.setAttribute('aria-hidden', 'true');
+
+    const preview = document.createElement('img');
+    preview.alt = '';
+    let zoomLevel = 1;
+    const minZoom = 0.5;
+    const maxZoom = 4;
+    const zoomStep = 0.2;
+
+    function applyZoom() {
+        preview.style.transform = `scale(${zoomLevel})`;
+    }
+
+    const closeBtn = document.createElement('button');
+    closeBtn.className = 'image-lightbox-close';
+    closeBtn.type = 'button';
+    closeBtn.setAttribute('aria-label', '关闭图片预览');
+    closeBtn.textContent = '×';
+
+    const controls = document.createElement('div');
+    controls.className = 'image-lightbox-controls';
+
+    const zoomOutBtn = document.createElement('button');
+    zoomOutBtn.className = 'image-lightbox-zoom';
+    zoomOutBtn.type = 'button';
+    zoomOutBtn.setAttribute('aria-label', '缩小图片');
+    zoomOutBtn.textContent = '−';
+
+    const zoomInBtn = document.createElement('button');
+    zoomInBtn.className = 'image-lightbox-zoom';
+    zoomInBtn.type = 'button';
+    zoomInBtn.setAttribute('aria-label', '放大图片');
+    zoomInBtn.textContent = '+';
+
+    controls.appendChild(zoomOutBtn);
+    controls.appendChild(zoomInBtn);
+    controls.appendChild(closeBtn);
+
+    lightbox.appendChild(preview);
+    lightbox.appendChild(controls);
+    document.body.appendChild(lightbox);
+
+    function closeLightbox() {
+        lightbox.classList.remove('active');
+        lightbox.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        preview.removeAttribute('src');
+        zoomLevel = 1;
+        applyZoom();
+    }
+
+    function zoomIn() {
+        zoomLevel = Math.min(maxZoom, Number((zoomLevel + zoomStep).toFixed(2)));
+        applyZoom();
+    }
+
+    function zoomOut() {
+        zoomLevel = Math.max(minZoom, Number((zoomLevel - zoomStep).toFixed(2)));
+        applyZoom();
+    }
+
+    images.forEach((img) => {
+        img.addEventListener('click', (event) => {
+            event.preventDefault();
+            preview.src = img.currentSrc || img.src;
+            preview.alt = img.alt || '';
+            zoomLevel = 1;
+            applyZoom();
+            lightbox.classList.add('active');
+            lightbox.setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden';
+        });
+    });
+
+    lightbox.addEventListener('click', (event) => {
+        if (event.target === lightbox) closeLightbox();
+    });
+    zoomInBtn.addEventListener('click', zoomIn);
+    zoomOutBtn.addEventListener('click', zoomOut);
+    closeBtn.addEventListener('click', closeLightbox);
+    document.addEventListener('keydown', (event) => {
+        if (!lightbox.classList.contains('active')) return;
+        if (event.key === 'Escape') {
+            closeLightbox();
+            return;
+        }
+        if (event.key === '+' || event.key === '=') {
+            event.preventDefault();
+            zoomIn();
+            return;
+        }
+        if (event.key === '-' || event.key === '_') {
+            event.preventDefault();
+            zoomOut();
+        }
+    });
+})();
+</script>

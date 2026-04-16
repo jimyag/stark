@@ -1,0 +1,73 @@
+{{ define "main" }}
+<content>
+  {{ if .Data.Singular }}
+  <h3 style="margin-bottom:0">Filtering for "{{ .Title }}"</h3>
+  <small>
+    <a href="{{ "blog" | relURL }}">Remove filter</a>
+  </small>
+  {{ end }}
+
+  {{/* Pinned posts */}}
+  {{ $pinned := where .Pages "Params.pinned" true }}
+  {{/* Regular posts */}}
+  {{ $regular := where .Pages "Params.pinned" "!=" true }}
+
+  {{ with $pinned }}
+  <div class="pinned-section">
+    <h3 class="year-header">置顶</h3>
+    <ul class="blog-posts">
+      {{ range sort . "Weight" }}
+      <li>
+        <span>
+          <i>
+            <time datetime='{{ .Date.Format "2006-01-02" }}' pubdate>
+              {{ .Date.Format "2006-01-02" }}
+            </time>
+          </i>
+        </span>
+        <a href="{{ .Permalink }}">{{ .Title }}</a>
+      </li>
+      {{ end }}
+    </ul>
+  </div>
+  {{ end }}
+
+  {{ $byYear := $regular.GroupByDate "2006" }}
+  {{ range $byYear }}
+  <div class="year-section">
+    <h3 class="year-header">{{ .Key }} <span class="year-count">({{ len .Pages }})</span></h3>
+    <ul class="blog-posts">
+      {{ range .Pages }}
+      <li>
+        <span>
+          <i>
+            <time datetime='{{ .Date.Format "2006-01-02" }}' pubdate>
+              {{ .Date.Format "2006-01-02" }}
+            </time>
+          </i>
+        </span>
+        <a href="{{ .Permalink }}">{{ .Title }}</a>
+      </li>
+      {{ end }}
+    </ul>
+  </div>
+  {{ end }}
+
+  {{ if and (not $pinned) (not $regular) }}
+  <ul class="blog-posts">
+    <li>No posts yet</li>
+  </ul>
+  {{ end }}
+
+  {{ if .Data.Singular }}
+  {{else}}
+  <small>
+    <div>
+      {{ range .Site.Taxonomies.tags }}
+      <a href="{{ .Page.Permalink }}">#{{ .Page.Title }}</a>&nbsp;
+      {{ end }}
+    </div>
+  </small>
+  {{ end }}
+</content>
+{{ end }}

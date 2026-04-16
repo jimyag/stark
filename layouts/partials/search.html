@@ -1,0 +1,204 @@
+<!-- Search modal -->
+<div id="search-modal" style="display:none">
+  <div id="search-box">
+    <input type="text" id="search-input" placeholder="Search posts, tags..." autocomplete="off">
+    <span id="search-close">&times;</span>
+  </div>
+  <ul id="search-results"></ul>
+</div>
+
+<style>
+#search-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 12vh;
+}
+#search-box {
+  background: var(--bg, #fff);
+  width: 90%;
+  max-width: 500px;
+  padding: 12px;
+  border-radius: 8px;
+  display: flex;
+  gap: 8px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+#search-input {
+  flex: 1;
+  border: none;
+  font-size: 16px;
+  background: transparent;
+  color: var(--text, #000);
+}
+#search-close {
+  cursor: pointer;
+  font-size: 24px;
+  color: var(--text, #666);
+  line-height: 1;
+}
+#search-results {
+  background: var(--bg, #fff);
+  width: 90%;
+  max-width: 500px;
+  max-height: 55vh;
+  overflow-y: auto;
+  margin-top: 8px;
+  border-radius: 8px;
+  list-style: none;
+  padding: 0;
+  margin-left: 0;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+#search-results:empty { display: none; }
+#search-results li {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border, #eee);
+}
+#search-results li:last-child { border-bottom: none; }
+#search-results li:hover { background: var(--accent-bg, #f5f5f5); }
+#search-results a {
+  text-decoration: underline;
+  text-underline-offset: 0.14em;
+  text-decoration-thickness: 0.08em;
+  color: inherit;
+  display: block;
+}
+#search-results .title { font-weight: bold; margin-bottom: 4px; }
+#search-results .meta { font-size: 12px; color: #595959; }
+#search-results .tags { font-size: 12px; color: #505050; margin-top: 4px; }
+#search-results .tags span { background: #e0e0e0; padding: 2px 6px; border-radius: 3px; margin-right: 4px; }
+#search-results .snippet { font-size: 13px; color: #4d4d4d; margin-top: 6px; line-height: 1.4; }
+#search-results mark { background: #fff59d; color: #000; padding: 0 2px; border-radius: 2px; }
+#search-input:focus-visible,
+#search-close:focus-visible,
+#search-results a:focus-visible {
+  outline: 3px solid #0b57d0;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+@media (prefers-color-scheme: dark) {
+  #search-box { background: #1a1a1a; }
+  #search-results { background: #1a1a1a; }
+  #search-results li:hover { background: #2a2a2a; }
+  #search-results .meta { color: #cfcfcf; }
+  #search-results .tags { color: #d0d0d0; }
+  #search-results .tags span { background: #444; }
+  #search-results .snippet { color: #c6c6c6; }
+  #search-results mark { background: #fbc02d; }
+}
+</style>
+
+<script>
+(function() {
+  let searchData = null;
+  const modal = document.getElementById('search-modal');
+  const input = document.getElementById('search-input');
+  const results = document.getElementById('search-results');
+
+  function openSearch() {
+    modal.style.display = 'flex';
+    input.value = '';
+    results.innerHTML = '';
+    input.focus();
+    if (!searchData) loadIndex();
+  }
+
+  function closeSearch() {
+    modal.style.display = 'none';
+  }
+
+  async function loadIndex() {
+    try {
+      const resp = await fetch('/index.json');
+      searchData = await resp.json();
+    } catch (e) {
+      console.error('Failed to load search index', e);
+    }
+  }
+
+  function search(query) {
+    if (!searchData || !query.trim()) {
+      results.innerHTML = '';
+      return;
+    }
+
+    const words = query.toLowerCase().split(/\s+/).filter(Boolean);
+
+    const matched = searchData
+      .map(item => {
+        const title = item.title.toLowerCase();
+        const content = (item.content || '').toLowerCase();
+        const tags = (item.tags || []).join(' ').toLowerCase();
+
+        let score = 0;
+        for (const word of words) {
+          if (title.includes(word)) score += 10;
+          if (tags.includes(word)) score += 5;
+          if (content.includes(word)) score += 1;
+        }
+        return { ...item, score };
+      })
+      .filter(item => item.score > 0)
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 10);
+
+    renderResults(matched, words);
+  }
+
+  function renderResults(items, words) {
+    if (items.length === 0) {
+      results.innerHTML = '<li style="text-align:center;color:#666;padding:20px">No results found</li>';
+      return;
+    }
+
+    results.innerHTML = items.map(item => {
+      const title = highlight(item.title, words);
+      const snippet = highlight((item.content || '').slice(0, 120) + '...', words);
+      const tags = (item.tags || []).map(t => `<span>#${escapeHtml(t)}</span>`).join('');
+
+      return `<li><a href="${item.url}">
+        <div class="title">${title}</div>
+        <div class="meta">${item.date}</div>
+        ${tags ? `<div class="tags">${tags}</div>` : ''}
+        <div class="snippet">${snippet}</div>
+      </a></li>`;
+    }).join('');
+  }
+
+  function highlight(text, words) {
+    let result = escapeHtml(text);
+    for (const word of words) {
+      const regex = new RegExp(`(${escapeRegex(word)})`, 'gi');
+      result = result.replace(regex, '<mark>$1</mark>');
+    }
+    return result;
+  }
+
+  function escapeHtml(str) {
+    return str.replace(/[&<>"']/g, c =>
+      ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
+  function escapeRegex(str) {
+    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
+
+  document.getElementById('search-btn').addEventListener('click', openSearch);
+  document.getElementById('search-close').addEventListener('click', closeSearch);
+  modal.addEventListener('click', e => { if (e.target === modal) closeSearch(); });
+  input.addEventListener('input', e => search(e.target.value));
+
+  document.addEventListener('keydown', e => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+      e.preventDefault();
+      openSearch();
+    }
+    if (e.key === 'Escape') closeSearch();
+  });
+})();
+</script>
