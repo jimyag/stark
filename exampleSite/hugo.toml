@@ -1,12 +1,13 @@
 baseURL = "https://example.com"
 
 theme = "stark"
-title = "My Blog"
+title = "ᕕ( ᐛ )ᕗ My Blog"
 copyright = "Copyright © 2024, Your Name."
-languageCode = "en-US"
+languageCode = "zh-CN"
 
 enableRobotsTXT = true
 
+# Bearblog-style clean URLs; suppress unused taxonomy pages
 disableKinds = ["taxonomy"]
 ignoreErrors = ["error-disable-taxonomy", "warning-goldmark-raw-html"]
 
@@ -14,37 +15,44 @@ ignoreErrors = ["error-disable-taxonomy", "warning-goldmark-raw-html"]
 blog = "/posts/:slug/"
 tags = "/blog/:slug"
 
+# Search requires the JSON output on the home page
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
+
 [[menu.main]]
   name = "RSS"
   url = "/index.xml"
   weight = 2
 
-[outputs]
-  home = ["HTML", "RSS", "JSON"]
-
 [params]
-description = "A minimal Hugo blog"
-favicon = "images/favicon.png"
+description = "A minimal blog about software engineering"
+favicon    = "images/favicon.png"
+images     = ["images/share.png"]  # default OG share image
 dateFormat = "2006-01-02"
-# hideMadeWithLine = true
-
-# ogLocale = "en_US"
+hideMadeWithLine = false
+# ogLocale = "zh_CN"
 
 [params.author]
-  name = "Your Name"
+  name  = "Your Name"
   email = "you@example.com"
 
-# Social links for structured data (schema.org Person)
+# Used by structured_data.html to populate schema.org Person.sameAs
 [params.social]
-  github = "your-github-username"
+  github        = "your-github-username"
   # stackoverflow = "https://stackoverflow.com/users/..."
-  # twitter = "your-twitter-handle"
+  # twitter       = "your-twitter-handle"
 
 [markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true          # allow raw HTML in Markdown
   [markup.highlight]
-    lineNos = true
+    style              = "monokai"
+    lineNos            = true
     lineNumbersInTable = true
-    style = "monokai"
+    codeFences         = true
+    guessSyntax        = true
+    noClasses          = true
   [markup.tableOfContents]
     startLevel = 2
-    endLevel = 4
+    endLevel   = 4
