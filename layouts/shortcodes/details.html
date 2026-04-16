@@ -1,0 +1,5 @@
+{{- $summary := .Get "summary" | default "Details" -}}
+<details class="details-block">
+  <summary>{{ $summary }}</summary>
+  <div class="details-content">{{ .Inner | markdownify }}</div>
+</details>

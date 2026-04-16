@@ -641,6 +641,60 @@
         .post-nav-label { color: #aaa; }
     }
 
+    /* Callout 提示块 */
+    .callout {
+        border-left: 4px solid #0b57d0;
+        padding: 0.8rem 1rem;
+        margin: 1.2rem 0;
+        border-radius: 0 4px 4px 0;
+        background: #f0f4ff;
+    }
+    .callout-title {
+        font-weight: 600;
+        margin-bottom: 0.3rem;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+    }
+    .callout-icon { font-style: normal; }
+    .callout.callout-note    { border-color: #0b57d0; background: #f0f4ff; }
+    .callout.callout-tip     { border-color: #1a7f37; background: #f0fff4; }
+    .callout.callout-warning { border-color: #e07800; background: #fff8f0; }
+    .callout.callout-danger  { border-color: #c92a2a; background: #fff0f0; }
+
+    /* Details 折叠块 */
+    .details-block {
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        margin: 1.2rem 0;
+        overflow: hidden;
+    }
+    .details-block summary {
+        padding: 0.7rem 1rem;
+        cursor: pointer;
+        font-weight: 500;
+        background: #f8f8f8;
+        list-style: none;
+        user-select: none;
+    }
+    .details-block summary::-webkit-details-marker { display: none; }
+    .details-block summary::before {
+        content: "▸ ";
+        font-size: 0.85em;
+    }
+    .details-block[open] summary::before { content: "▾ "; }
+    .details-block .details-content {
+        padding: 0.8rem 1rem;
+    }
+    @media (prefers-color-scheme: dark) {
+        .callout.callout-note    { background: #1a2035; }
+        .callout.callout-tip     { background: #0f2318; }
+        .callout.callout-warning { background: #2a1e0a; }
+        .callout.callout-danger  { background: #2a0f0f; }
+        .details-block { border-color: #444; }
+        .details-block summary { background: #2a2a2a; }
+    }
+
     /* 代码块语言标签 */
     .code-lang {
         position: absolute;

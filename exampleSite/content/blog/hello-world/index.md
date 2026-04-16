@@ -70,3 +70,27 @@ Click the image to open the lightbox preview.
 ## Table of Contents
 
 The TOC is generated automatically from headings (h2–h4 by default). On screens wider than 1400 px it appears as a fixed sidebar. On narrower screens a floating "目录" button opens a slide-up modal.
+
+## Callout Blocks
+
+{{< callout type="note" >}}
+This is a **note** callout. Markdown is supported inside.
+{{< /callout >}}
+
+{{< callout type="tip" title="Pro tip" >}}
+Use `pinned: true` in front matter to pin posts to the top of the list.
+{{< /callout >}}
+
+{{< callout type="warning" >}}
+Be careful with `markup.goldmark.renderer.unsafe = true` — only enable it if you trust your content.
+{{< /callout >}}
+
+{{< callout type="danger" >}}
+This action cannot be undone.
+{{< /callout >}}
+
+## Collapsible Details
+
+{{< details summary="Click to expand" >}}
+Hidden content revealed on click. Useful for long code samples or spoilers.
+{{< /details >}}
