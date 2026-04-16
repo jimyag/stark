@@ -78,3 +78,9 @@ other = "点击放大图表"
 
 [no_posts]
 other = "暂无文章"
+
+[theme_dark]
+other = "深色模式"
+
+[theme_light]
+other = "浅色模式"

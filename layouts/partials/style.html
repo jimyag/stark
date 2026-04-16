@@ -124,47 +124,37 @@
     color: #8b6fcb;
   }
 
-  @media (prefers-color-scheme: dark) {
-    body {
-      background-color: #333;
-      color: #ddd;
-    }
+  html[data-theme="dark"] body {
+    background-color: #333;
+    color: #ddd;
+  }
 
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6,
-    strong,
-    b {
-      color: #eee;
-    }
+  html[data-theme="dark"] :is(h1, h2, h3, h4, h5, h6, strong, b) {
+    color: #eee;
+  }
 
-    a {
-      color: #8cc2dd;
-    }
+  html[data-theme="dark"] a {
+    color: #8cc2dd;
+  }
 
-    code {
-      background-color: #777;
-    }
+  html[data-theme="dark"] code {
+    background-color: #777;
+  }
 
-    pre code {
-      color: #ddd;
-    }
+  html[data-theme="dark"] pre code {
+    color: #ddd;
+  }
 
-    blockquote {
-      color: #ccc;
-    }
+  html[data-theme="dark"] blockquote {
+    color: #ccc;
+  }
 
-    textarea,
-    input {
-      background-color: #252525;
-      color: #ddd;
-    }
+  html[data-theme="dark"] :is(textarea, input) {
+    background-color: #252525;
+    color: #ddd;
+  }
 
-    .helptext {
-      color: #aaa;
-    }
+  html[data-theme="dark"] .helptext {
+    color: #aaa;
   }
 </style>

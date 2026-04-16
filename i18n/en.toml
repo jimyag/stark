@@ -78,3 +78,9 @@ other = "Click to zoom"
 
 [no_posts]
 other = "No posts yet"
+
+[theme_dark]
+other = "Dark mode"
+
+[theme_light]
+other = "Light mode"

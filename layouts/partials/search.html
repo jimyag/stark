@@ -81,16 +81,14 @@
   outline-offset: 2px;
   border-radius: 4px;
 }
-@media (prefers-color-scheme: dark) {
-  #search-box { background: #1a1a1a; }
-  #search-results { background: #1a1a1a; }
-  #search-results li:hover { background: #2a2a2a; }
-  #search-results .meta { color: #cfcfcf; }
-  #search-results .tags { color: #d0d0d0; }
-  #search-results .tags span { background: #444; }
-  #search-results .snippet { color: #c6c6c6; }
-  #search-results mark { background: #fbc02d; }
-}
+html[data-theme="dark"] #search-box { background: #1a1a1a; }
+html[data-theme="dark"] #search-results { background: #1a1a1a; }
+html[data-theme="dark"] #search-results li:hover { background: #2a2a2a; }
+html[data-theme="dark"] #search-results .meta { color: #cfcfcf; }
+html[data-theme="dark"] #search-results .tags { color: #d0d0d0; }
+html[data-theme="dark"] #search-results .tags span { background: #444; }
+html[data-theme="dark"] #search-results .snippet { color: #c6c6c6; }
+html[data-theme="dark"] #search-results mark { background: #fbc02d; }
 </style>
 
 <script>

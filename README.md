@@ -279,10 +279,11 @@ Hidden content revealed on click.
 
 ### Pagination
 
-Set `paginate` in `hugo.toml` to control the number of posts per page:
+Set `pagerSize` in `hugo.toml` to control the number of posts per page (Hugo v0.128+ syntax):
 
 ```toml
-paginate = 20
+[pagination]
+  pagerSize = 20
 ```
 
 Pinned posts are always shown in full on every page and are not included in the paginator.

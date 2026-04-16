@@ -12,9 +12,7 @@
         z-index: 9999;
         transition: width 0.1s linear;
     }
-    @media (prefers-color-scheme: dark) {
-        #reading-progress { background: #9ecbff; }
-    }
+    html[data-theme="dark"] #reading-progress { background: #9ecbff; }
 
     /* 加宽文章内容区域 */
     body {
@@ -43,18 +41,9 @@
     table tr:nth-child(even) {
         background-color: #fafafa;
     }
-    @media (prefers-color-scheme: dark) {
-        table th,
-        table td {
-            border-color: #444;
-        }
-        table th {
-            background-color: #2a2a2a;
-        }
-        table tr:nth-child(even) {
-            background-color: #2a2a2a;
-        }
-    }
+    html[data-theme="dark"] :is(table th, table td) { border-color: #444; }
+    html[data-theme="dark"] table th { background-color: #2a2a2a; }
+    html[data-theme="dark"] table tr:nth-child(even) { background-color: #2a2a2a; }
 
     a {
         color: #0b57d0;
@@ -246,30 +235,13 @@
     }
 
     /* 深色模式目录样式 */
-    @media (prefers-color-scheme: dark) {
-        a {
-            color: #9ecbff;
-        }
-        a:visited {
-            color: #d7b3ff;
-        }
-        .toc nav a {
-            color: var(--text, #ddd);
-        }
-        .toc-toggle {
-            background: #555;
-        }
-        .toc-modal-content {
-            background: #1a1a1a;
-        }
-        .toc-modal-header {
-            background: #1a1a1a;
-            border-color: #333;
-        }
-        .toc-modal nav a {
-            color: #ddd;
-        }
-    }
+    html[data-theme="dark"] a { color: #9ecbff; }
+    html[data-theme="dark"] a:visited { color: #d7b3ff; }
+    html[data-theme="dark"] .toc nav a { color: var(--text, #ddd); }
+    html[data-theme="dark"] .toc-toggle { background: #555; }
+    html[data-theme="dark"] .toc-modal-content { background: #1a1a1a; }
+    html[data-theme="dark"] .toc-modal-header { background: #1a1a1a; border-color: #333; }
+    html[data-theme="dark"] .toc-modal nav a { color: #ddd; }
 
     /* 图片点击放大预览 */
     main content img {
@@ -389,11 +361,7 @@
         border-radius: 4px;
         font-size: 0.9em;
     }
-    @media (prefers-color-scheme: dark) {
-        :not(pre) > code {
-            background: #3a3a3a;
-        }
-    }
+    html[data-theme="dark"] :not(pre) > code { background: #3a3a3a; }
 
     /* 代码块复制按钮 */
     .copy-btn {
@@ -443,15 +411,8 @@
         font-weight: normal;
         color: #666;
     }
-    @media (prefers-color-scheme: dark) {
-        .year-header {
-            border-bottom-color: #444;
-            color: #aaa;
-        }
-        .pinned-section .year-header {
-            color: #f39c12;
-        }
-    }
+    html[data-theme="dark"] .year-header { border-bottom-color: #444; color: #aaa; }
+    html[data-theme="dark"] .pinned-section .year-header { color: #f39c12; }
 
     /* Mermaid 图表优化 */
     .mermaid {
@@ -472,11 +433,7 @@
         outline-offset: 2px;
     }
     
-    @media (prefers-color-scheme: dark) {
-        .mermaid:hover {
-            background-color: rgba(74, 158, 255, 0.1) !important;
-        }
-    }
+    html[data-theme="dark"] .mermaid:hover { background-color: rgba(74, 158, 255, 0.1) !important; }
 
     /* 改善线条颜色和对比度 */
     .mermaid .er .entityBox {
@@ -636,10 +593,8 @@
         text-align: right;
         margin-left: auto;
     }
-    @media (prefers-color-scheme: dark) {
-        .post-nav { border-top-color: #444; }
-        .post-nav-label { color: #aaa; }
-    }
+    html[data-theme="dark"] .post-nav { border-top-color: #444; }
+    html[data-theme="dark"] .post-nav-label { color: #aaa; }
 
     /* 分页导航 */
     .pagination {
@@ -669,11 +624,9 @@
         font-size: 0.9rem;
         color: #aaa;
     }
-    @media (prefers-color-scheme: dark) {
-        .pagination a, .pagination .page-current { border-color: #555; }
-        .pagination a:hover { background: #2a2a2a; }
-        .pagination .page-current { background: #4a7fcb; border-color: #4a7fcb; }
-    }
+    html[data-theme="dark"] :is(.pagination a, .pagination .page-current) { border-color: #555; }
+    html[data-theme="dark"] .pagination a:hover { background: #2a2a2a; }
+    html[data-theme="dark"] .pagination .page-current { background: #4a7fcb; border-color: #4a7fcb; }
 
     /* Callout 提示块 */
     .callout {
@@ -720,14 +673,12 @@
     .details-block .details-content {
         padding: 0.8rem 1rem;
     }
-    @media (prefers-color-scheme: dark) {
-        .callout.callout-note    { background: #1a2035; }
-        .callout.callout-tip     { background: #0f2318; }
-        .callout.callout-warning { background: #2a1e0a; }
-        .callout.callout-danger  { background: #2a0f0f; }
-        .details-block { border-color: #444; }
-        .details-block summary { background: #2a2a2a; }
-    }
+    html[data-theme="dark"] .callout.callout-note    { background: #1a2035; }
+    html[data-theme="dark"] .callout.callout-tip     { background: #0f2318; }
+    html[data-theme="dark"] .callout.callout-warning { background: #2a1e0a; }
+    html[data-theme="dark"] .callout.callout-danger  { background: #2a0f0f; }
+    html[data-theme="dark"] .details-block { border-color: #444; }
+    html[data-theme="dark"] .details-block summary { background: #2a2a2a; }
 
     /* 代码块语言标签 */
     .code-lang {
@@ -750,9 +701,7 @@
         color: #888;
         margin-top: 0.2rem;
     }
-    @media (prefers-color-scheme: dark) {
-        .post-lastmod { color: #aaa; }
-    }
+    html[data-theme="dark"] .post-lastmod { color: #aaa; }
 </style>
 
 {{- $hasMath := false -}}
