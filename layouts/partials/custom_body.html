@@ -2,9 +2,10 @@
 <script type="module">
     import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
     
+    const isDarkMode = document.documentElement.getAttribute('data-theme') === 'dark';
     mermaid.initialize({
         startOnLoad: true,
-        theme: 'forest',
+        theme: isDarkMode ? 'dark' : 'forest',
         securityLevel: 'loose',
         flowchart: {
             useMaxWidth: true,
