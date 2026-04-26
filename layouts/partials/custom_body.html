@@ -1,20 +1,42 @@
 {{ if .Store.Get "hasMermaid" }}
 <script type="module">
     import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.esm.min.mjs';
-    
-    const isDarkMode = document.documentElement.getAttribute('data-theme') === 'dark';
-    mermaid.initialize({
-        startOnLoad: true,
-        theme: isDarkMode ? 'dark' : 'forest',
-        securityLevel: 'loose',
-        flowchart: {
-            useMaxWidth: true,
-            htmlLabels: true
-        },
-        er: {
-            useMaxWidth: true
-        }
-    });
+
+    function getMermaidTheme() {
+        return document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'forest';
+    }
+
+    function getMermaidConfig() {
+        return {
+            startOnLoad: false,
+            theme: getMermaidTheme(),
+            securityLevel: 'loose',
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true
+            },
+            er: {
+                useMaxWidth: true
+            }
+        };
+    }
+
+    async function renderMermaids() {
+        const mermaidBlocks = document.querySelectorAll('.mermaid');
+        if (mermaidBlocks.length === 0) return;
+
+        mermaidBlocks.forEach((el) => {
+            if (!el.dataset.mermaidSource) {
+                el.dataset.mermaidSource = el.textContent.trim();
+            }
+            el.removeAttribute('data-processed');
+            el.innerHTML = el.dataset.mermaidSource;
+        });
+
+        mermaid.initialize(getMermaidConfig());
+        await mermaid.run({ querySelector: '.mermaid' });
+        addMermaidClickHandlers();
+    }
     
     // 为 mermaid 图表添加点击放大功能
     function addMermaidClickHandlers() {
@@ -246,14 +268,16 @@
         subtree: true
     });
     
-    // 页面加载后立即检查
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => {
-            setTimeout(addMermaidClickHandlers, 500);
+    document.addEventListener('stark:theme-change', () => {
+        closeMermaidLightbox();
+        renderMermaids().catch((err) => {
+            console.error('Failed to re-render mermaid diagrams', err);
         });
-    } else {
-        setTimeout(addMermaidClickHandlers, 500);
-    }
+    });
+
+    renderMermaids().catch((err) => {
+        console.error('Failed to render mermaid diagrams', err);
+    });
     
     // 键盘事件支持
     document.addEventListener('keydown', (e) => {
@@ -318,6 +342,7 @@
         document.documentElement.setAttribute('data-theme', theme);
         btn.textContent = theme === 'dark' ? '☀' : '☾';
         btn.setAttribute('aria-label', theme === 'dark' ? window.StarkI18n.themeLight : window.StarkI18n.themeDark);
+        document.dispatchEvent(new CustomEvent('stark:theme-change', { detail: { theme: theme } }));
     }
 
     // 初始化按钮状态
@@ -388,7 +413,7 @@
     padding: 10px 16px;
     font-size: 14px;
     color: #fff;
-    background: #333;
+    background: var(--primary);
     border: none;
     border-radius: 20px;
     cursor: pointer;
@@ -399,7 +424,7 @@
     z-index: 999;
 }
 #back-to-top:hover {
-    background: #555;
+    background: var(--link-hover);
 }
 #back-to-top.visible {
     opacity: 1;
@@ -412,7 +437,6 @@
         left: 1.5rem;
     }
 }
-html[data-theme="dark"] #back-to-top { background: #555; }
 </style>
 <script>
 (function() {

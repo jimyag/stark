@@ -8,12 +8,10 @@
         left: 0;
         width: 0%;
         height: 3px;
-        background: #0b57d0;
+        background: var(--link);
         z-index: 9999;
         transition: width 0.1s linear;
     }
-    html[data-theme="dark"] #reading-progress { background: #9ecbff; }
-
     /* 加宽文章内容区域 */
     body {
         max-width: 900px;
@@ -30,39 +28,37 @@
     }
     table th,
     table td {
-        border: 1px solid #ddd;
+        border: 1px solid var(--border);
         padding: 8px 12px;
         text-align: left;
     }
     table th {
-        background-color: #f5f5f5;
+        background-color: var(--surface-subtle);
         font-weight: 600;
     }
     table tr:nth-child(even) {
-        background-color: #fafafa;
+        background-color: var(--surface-muted);
     }
-    html[data-theme="dark"] :is(table th, table td) { border-color: #444; }
-    html[data-theme="dark"] table th { background-color: #2a2a2a; }
-    html[data-theme="dark"] table tr:nth-child(even) { background-color: #2a2a2a; }
 
     a {
-        color: #0b57d0;
+        color: var(--link);
         text-decoration: underline;
         text-underline-offset: 0.14em;
         text-decoration-thickness: 0.08em;
         text-decoration-skip-ink: auto;
     }
     a:visited {
-        color: #5b2aa6;
+        color: var(--link-visited);
     }
     a:hover {
+        color: var(--link-hover);
         text-decoration-thickness: 0.12em;
     }
     a:focus-visible,
     button:focus-visible,
     input:focus-visible,
     summary:focus-visible {
-        outline: 3px solid #0b57d0;
+        outline: 3px solid var(--focus);
         outline-offset: 2px;
         border-radius: 2px;
     }
@@ -135,7 +131,7 @@
         line-height: 1.4;
     }
     .toc nav a {
-        color: var(--text, #333);
+        color: var(--content);
         text-decoration: none;
         display: block;
     }
@@ -163,7 +159,7 @@
             padding: 10px 16px;
             font-size: 14px;
             color: #fff;
-            background: #333;
+            background: var(--primary);
             border: none;
             border-radius: 20px;
             cursor: pointer;
@@ -186,7 +182,7 @@
             display: flex;
         }
         .toc-modal-content {
-            background: var(--bg, #fff);
+            background: var(--entry);
             width: 100%;
             max-height: 70vh;
             overflow-y: auto;
@@ -198,18 +194,18 @@
             justify-content: space-between;
             align-items: center;
             padding: 1rem 1.2rem;
-            border-bottom: 1px solid var(--border, #eee);
+            border-bottom: 1px solid var(--border);
             font-weight: bold;
             position: sticky;
             top: 0;
-            background: var(--bg, #fff);
+            background: var(--entry);
         }
         .toc-modal-close {
             background: none;
             border: none;
             font-size: 24px;
             cursor: pointer;
-            color: var(--text, #666);
+            color: var(--secondary);
             line-height: 1;
         }
         .toc-modal nav {
@@ -227,21 +223,12 @@
             margin: 0.6rem 0;
         }
         .toc-modal nav a {
-            color: var(--text, #333);
+            color: var(--content);
             text-decoration: none;
             display: block;
             padding: 4px 0;
         }
     }
-
-    /* 深色模式目录样式 */
-    html[data-theme="dark"] a { color: #9ecbff; }
-    html[data-theme="dark"] a:visited { color: #d7b3ff; }
-    html[data-theme="dark"] .toc nav a { color: var(--text, #ddd); }
-    html[data-theme="dark"] .toc-toggle { background: #555; }
-    html[data-theme="dark"] .toc-modal-content { background: #1a1a1a; }
-    html[data-theme="dark"] .toc-modal-header { background: #1a1a1a; border-color: #333; }
-    html[data-theme="dark"] .toc-modal nav a { color: #ddd; }
 
     /* 图片点击放大预览 */
     main content img {
@@ -351,11 +338,10 @@
     /* 内联代码样式 */
     :not(pre) > code {
         padding: 2px 6px;
-        background: #f0f0f0;
+        background: var(--code-inline-bg);
         border-radius: 4px;
         font-size: 0.9em;
     }
-    html[data-theme="dark"] :not(pre) > code { background: #3a3a3a; }
 
     /* 代码块复制按钮 */
     .copy-btn {
@@ -364,8 +350,8 @@
         right: 0.5rem;
         padding: 4px 10px;
         font-size: 12px;
-        color: #ccc;
-        background: #444;
+        color: #e5e7eb;
+        background: rgba(15, 23, 42, 0.72);
         border: none;
         border-radius: 4px;
         cursor: pointer;
@@ -377,7 +363,7 @@
         opacity: 1;
     }
     .copy-btn:hover {
-        background: #555;
+        background: rgba(15, 23, 42, 0.88);
         color: #fff;
     }
     .copy-btn.copied {
@@ -393,9 +379,9 @@
     .year-header {
         margin: 0 0 0.5rem 0;
         padding-bottom: 0.3rem;
-        border-bottom: 1px solid #eee;
+        border-bottom: 1px solid var(--border);
         font-size: 1.2rem;
-        color: #666;
+        color: var(--secondary);
     }
     .pinned-section .year-header {
         color: #e67e22;
@@ -403,13 +389,13 @@
     .year-count {
         font-size: 0.85rem;
         font-weight: normal;
-        color: #666;
+        color: var(--secondary);
     }
-    html[data-theme="dark"] .year-header { border-bottom-color: #444; color: #aaa; }
-    html[data-theme="dark"] .pinned-section .year-header { color: #f39c12; }
+    html[data-theme="dark"] .pinned-section .year-header { color: #f59e0b; }
 
     /* Mermaid 图表优化 */
     .mermaid {
+        color: var(--primary);
         background-color: transparent !important;
         cursor: pointer;
         padding: 0.5rem;
@@ -423,11 +409,11 @@
     }
     
     .mermaid:focus {
-        outline: 2px solid #0b57d0;
+        outline: 2px solid var(--focus);
         outline-offset: 2px;
     }
     
-    html[data-theme="dark"] .mermaid:hover { background-color: rgba(74, 158, 255, 0.1) !important; }
+    html[data-theme="dark"] .mermaid:hover { background-color: rgba(34, 211, 238, 0.12) !important; }
 
     /* 改善线条颜色和对比度 */
     .mermaid .er .entityBox {
@@ -529,7 +515,7 @@
     }
     
     .mermaid-lightbox-controls button:focus {
-        outline: 2px solid #0b57d0;
+        outline: 2px solid var(--focus);
         outline-offset: 2px;
     }
     
@@ -559,12 +545,12 @@
         gap: 1rem;
         margin-top: 2.5rem;
         padding-top: 1.5rem;
-        border-top: 1px solid #eee;
+        border-top: 1px solid var(--border);
         font-size: 0.9rem;
     }
     .post-nav a {
         max-width: 48%;
-        color: var(--text, #444);
+        color: var(--content);
         text-decoration: none;
         display: flex;
         flex-direction: column;
@@ -575,7 +561,7 @@
     }
     .post-nav-label {
         font-size: 0.78rem;
-        color: #888;
+        color: var(--secondary);
         text-transform: uppercase;
         letter-spacing: 0.04em;
     }
@@ -587,9 +573,6 @@
         text-align: right;
         margin-left: auto;
     }
-    html[data-theme="dark"] .post-nav { border-top-color: #444; }
-    html[data-theme="dark"] .post-nav-label { color: #aaa; }
-
     /* 分页导航 */
     .pagination {
         display: flex;
@@ -605,30 +588,26 @@
         border-radius: 4px;
         font-size: 0.9rem;
         text-decoration: none;
-        border: 1px solid #ddd;
+        border: 1px solid var(--border);
     }
-    .pagination a:hover { background: #f5f5f5; }
+    .pagination a:hover { background: var(--surface-subtle); }
     .pagination .page-current {
-        background: #0b57d0;
+        background: var(--link);
         color: #fff;
-        border-color: #0b57d0;
+        border-color: var(--link);
     }
     .pagination .page-disabled {
         padding: 6px 12px;
         font-size: 0.9rem;
         color: #aaa;
     }
-    html[data-theme="dark"] :is(.pagination a, .pagination .page-current) { border-color: #555; }
-    html[data-theme="dark"] .pagination a:hover { background: #2a2a2a; }
-    html[data-theme="dark"] .pagination .page-current { background: #4a7fcb; border-color: #4a7fcb; }
-
     /* Callout 提示块 */
     .callout {
-        border-left: 4px solid #0b57d0;
+        border-left: 4px solid var(--link);
         padding: 0.8rem 1rem;
         margin: 1.2rem 0;
         border-radius: 0 4px 4px 0;
-        background: #f0f4ff;
+        background: #ecfeff;
     }
     .callout-title {
         font-weight: 600;
@@ -638,14 +617,14 @@
         gap: 0.4rem;
     }
     .callout-icon { font-style: normal; }
-    .callout.callout-note    { border-color: #0b57d0; background: #f0f4ff; }
+    .callout.callout-note    { border-color: var(--link); background: #ecfeff; }
     .callout.callout-tip     { border-color: #1a7f37; background: #f0fff4; }
     .callout.callout-warning { border-color: #e07800; background: #fff8f0; }
     .callout.callout-danger  { border-color: #c92a2a; background: #fff0f0; }
 
     /* Details 折叠块 */
     .details-block {
-        border: 1px solid #ddd;
+        border: 1px solid var(--border);
         border-radius: 6px;
         margin: 1.2rem 0;
         overflow: hidden;
@@ -654,7 +633,7 @@
         padding: 0.7rem 1rem;
         cursor: pointer;
         font-weight: 500;
-        background: #f8f8f8;
+        background: var(--surface-muted);
         list-style: none;
         user-select: none;
     }
@@ -671,9 +650,6 @@
     html[data-theme="dark"] .callout.callout-tip     { background: #0f2318; }
     html[data-theme="dark"] .callout.callout-warning { background: #2a1e0a; }
     html[data-theme="dark"] .callout.callout-danger  { background: #2a0f0f; }
-    html[data-theme="dark"] .details-block { border-color: #444; }
-    html[data-theme="dark"] .details-block summary { background: #2a2a2a; }
-
     /* 代码块语言标签 */
     .code-lang {
         position: absolute;
@@ -681,7 +657,7 @@
         left: 0.6rem;
         font-size: 11px;
         font-family: monospace;
-        color: #aaa;
+        color: var(--secondary);
         letter-spacing: 0.03em;
         pointer-events: none;
         user-select: none;
@@ -692,10 +668,9 @@
     /* 最后修改时间 */
     .post-lastmod {
         font-size: 0.82rem;
-        color: #888;
+        color: var(--secondary);
         margin-top: 0.2rem;
     }
-    html[data-theme="dark"] .post-lastmod { color: #aaa; }
 
     /* ===== Chroma 语法高亮 — 亮色: github，暗色: dracula ===== */
     /* 亮色主题 (github) */
@@ -792,6 +767,8 @@
     html[data-theme="dark"] .chroma .na { color:#50fa7b }
     html[data-theme="dark"] .chroma .nc { color:#50fa7b }
     html[data-theme="dark"] .chroma .nl { color:#8be9fd;font-style:italic }
+    html[data-theme="dark"] .chroma .nn { color:#f8f8f2 }
+    html[data-theme="dark"] .chroma .nx { color:#f8f8f2 }
     html[data-theme="dark"] .chroma .nt { color:#ff79c6 }
     html[data-theme="dark"] .chroma .nb { color:#8be9fd;font-style:italic }
     html[data-theme="dark"] .chroma .bp { font-style:italic }
@@ -825,6 +802,7 @@
     html[data-theme="dark"] .chroma .mo { color:#bd93f9 }
     html[data-theme="dark"] .chroma .o { color:#ff79c6 }
     html[data-theme="dark"] .chroma .ow { color:#ff79c6 }
+    html[data-theme="dark"] .chroma .p { color:#f8f8f2 }
     html[data-theme="dark"] .chroma .c { color:#6272a4 }
     html[data-theme="dark"] .chroma .ch { color:#6272a4 }
     html[data-theme="dark"] .chroma .cm { color:#6272a4 }
@@ -832,13 +810,15 @@
     html[data-theme="dark"] .chroma .cs { color:#6272a4 }
     html[data-theme="dark"] .chroma .cp { color:#ff79c6 }
     html[data-theme="dark"] .chroma .cpf { color:#ff79c6 }
-    html[data-theme="dark"] .chroma .gd { color:#f55 }
-    html[data-theme="dark"] .chroma .ge { text-decoration:underline }
+    html[data-theme="dark"] .chroma .err { color:#ffb4a9;background-color:#5a1f28 }
+    html[data-theme="dark"] .chroma .gd { color:#ff6b6b }
+    html[data-theme="dark"] .chroma .ge { color:#f8f8f2;text-decoration:underline }
     html[data-theme="dark"] .chroma .gh { font-weight:bold }
     html[data-theme="dark"] .chroma .gi { color:#50fa7b;font-weight:bold }
-    html[data-theme="dark"] .chroma .go { color:#44475a }
+    html[data-theme="dark"] .chroma .go { color:#94a3b8 }
     html[data-theme="dark"] .chroma .gu { font-weight:bold }
     html[data-theme="dark"] .chroma .gl { text-decoration:underline }
+    html[data-theme="dark"] .chroma .w { color:#f8f8f2 }
 
     /* Mermaid lightbox 深色模式背景 */
     html[data-theme="dark"] #mermaid-lightbox-container { background: #282a36; }
