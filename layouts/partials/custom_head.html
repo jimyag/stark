@@ -54,6 +54,28 @@
         color: var(--link-hover);
         text-decoration-thickness: 0.12em;
     }
+    .heading-anchor {
+        color: inherit;
+        text-decoration: none;
+    }
+    .heading-anchor:visited {
+        color: inherit;
+    }
+    .heading-anchor:hover {
+        color: inherit;
+        text-decoration: underline;
+    }
+    .heading-anchor::after {
+        content: "#";
+        margin-left: 0.35em;
+        color: var(--secondary);
+        opacity: 0;
+        font-weight: normal;
+    }
+    .heading-anchor:hover::after,
+    .heading-anchor:focus-visible::after {
+        opacity: 1;
+    }
     a:focus-visible,
     button:focus-visible,
     input:focus-visible,
