@@ -19,6 +19,9 @@ other = "Copied!"
 [copy_failed]
 other = "Failed"
 
+[markdown]
+other = "Markdown"
+
 [back_to_top]
 other = "Top"
 

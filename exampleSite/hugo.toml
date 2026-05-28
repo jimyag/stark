@@ -20,6 +20,19 @@ tags = "/blog/:slug"
 # Search requires the JSON output on the home page
 [outputs]
   home = ["HTML", "RSS", "JSON"]
+  page = ["HTML", "MARKDOWN"]
+
+[mediaTypes]
+  [mediaTypes."text/markdown"]
+    suffixes = ["md"]
+
+[outputFormats]
+  [outputFormats.MARKDOWN]
+    mediaType = "text/markdown"
+    isPlainText = true
+    notAlternative = true
+    permalinkable = true
+    ugly = true
 
 [[menu.main]]
   name = "RSS"

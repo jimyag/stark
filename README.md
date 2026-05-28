@@ -11,6 +11,7 @@ Live demo: [jimyag.com](https://jimyag.com)
 - Mermaid diagrams — fenced code block with `mermaid` language tag; click to open zoomable lightbox (scroll wheel, drag, keyboard shortcuts)
 - Image lightbox — click any image in a post to preview with zoom controls
 - Code copy button — appears on hover over any highlighted code block
+- Raw Markdown link — direct link from each post to its source Markdown
 - Code block language label — language name shown in top-left corner of each code block
 - Reading progress bar — 3 px bar at the top of the viewport
 - Back to top button — appears after scrolling 300 px
@@ -61,8 +62,22 @@ blog = "/posts/:slug/"
 tags = "/blog/:slug"
 
 # Search requires a JSON output on the home page
+# Raw Markdown links require the MARKDOWN output on pages
 [outputs]
   home = ["HTML", "RSS", "JSON"]
+  page = ["HTML", "MARKDOWN"]
+
+[mediaTypes]
+  [mediaTypes."text/markdown"]
+    suffixes = ["md"]
+
+[outputFormats]
+  [outputFormats.MARKDOWN]
+    mediaType = "text/markdown"
+    isPlainText = true
+    notAlternative = true
+    permalinkable = true
+    ugly = true
 
 [[menu.main]]
   name   = "RSS"
@@ -169,6 +184,28 @@ Requires the JSON output on the home page:
 ```toml
 [outputs]
   home = ["HTML", "RSS", "JSON"]
+```
+
+### Raw Markdown Link
+
+Post pages can show a "Markdown" link to the generated Markdown output for the current page. With the configuration below, `/posts/hello-world/` links to its raw Markdown at `/posts/hello-world.md`.
+
+```toml
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
+  page = ["HTML", "MARKDOWN"]
+
+[mediaTypes]
+  [mediaTypes."text/markdown"]
+    suffixes = ["md"]
+
+[outputFormats]
+  [outputFormats.MARKDOWN]
+    mediaType = "text/markdown"
+    isPlainText = true
+    notAlternative = true
+    permalinkable = true
+    ugly = true
 ```
 
 ### Pinned Posts

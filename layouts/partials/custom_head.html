@@ -392,6 +392,30 @@
         background: #2ecc71;
         color: #fff;
     }
+    .post-meta-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+    }
+    .post-meta-row p {
+        margin: 0.5rem 0;
+    }
+    .markdown-link {
+        padding: 4px 10px;
+        font-size: 12px;
+        color: var(--primary);
+        background: var(--surface-subtle);
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        text-decoration: none;
+        transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+    .markdown-link:hover {
+        color: var(--link-hover);
+        border-color: var(--link-hover);
+    }
 
     /* 博客列表年份分组样式 */
     .year-section,
