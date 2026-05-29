@@ -1,6 +1,7 @@
 <script>
 window.StarkI18n = {
   copy:              {{ printf "%s" (i18n "copy")               | jsonify | safeJS }},
+  copyCode:          {{ printf "%s" (i18n "copy_code")          | jsonify | safeJS }},
   copied:            {{ printf "%s" (i18n "copied")             | jsonify | safeJS }},
   copyFailed:        {{ printf "%s" (i18n "copy_failed")        | jsonify | safeJS }},
   backToTop:         {{ printf "%s" (i18n "back_to_top")        | jsonify | safeJS }},
@@ -17,5 +18,12 @@ window.StarkI18n = {
   imageClickZoom:    {{ printf "%s" (i18n "image_click_zoom")   | jsonify | safeJS }},
   themeDark:         {{ printf "%s" (i18n "theme_dark")         | jsonify | safeJS }},
   themeLight:        {{ printf "%s" (i18n "theme_light")        | jsonify | safeJS }},
+};
+window.StarkConfig = {
+  {{- with .Site.Home.OutputFormats.Get "JSON" }}
+  searchIndexURL: {{ .RelPermalink | jsonify | safeJS }},
+  {{- else }}
+  searchIndexURL: {{ "index.json" | relURL | jsonify | safeJS }},
+  {{- end }}
 };
 </script>

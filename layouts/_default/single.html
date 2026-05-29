@@ -25,9 +25,9 @@
     </p>
     {{- end -}}
     {{ end }}{{ end }}
-    <content>
+    <div class="content">
       {{ .Content }}
-    </content>
+    </div>
     <p>
       {{ range (.GetTerms "tags") }}
       <a href="{{ .Permalink }}">#{{ .LinkTitle }}</a>

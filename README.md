@@ -112,7 +112,7 @@ hideMadeWithLine = false                  # set true to hide footer credit
     lineNumbersInTable = true
     codeFences         = true
     guessSyntax        = true
-    noClasses          = true
+    noClasses          = false
   [markup.tableOfContents]
     startLevel = 2
     endLevel   = 4
@@ -249,7 +249,7 @@ The TOC is generated automatically from headings within the range set in `[marku
 
 ### Image Lightbox
 
-All images inside `<main content>` get a click handler. Clicking opens a fullscreen overlay with zoom-in/zoom-out buttons. Keyboard: `+`/`-` to zoom, `Escape` to close.
+All images inside the main content area get a click handler. Clicking opens a fullscreen overlay with zoom-in/zoom-out buttons. Keyboard: `+`/`-` to zoom, `Escape` to close.
 
 Local images in page bundles are automatically processed: resized to a max width of 1200 px and converted to WebP with `loading="lazy" decoding="async"`.
 

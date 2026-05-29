@@ -1,6 +1,24 @@
 [toc]
 other = "Table of Contents"
 
+[home]
+other = "Home"
+
+[blog]
+other = "Blog"
+
+[search]
+other = "Search"
+
+[search_close]
+other = "Close search"
+
+[filtering_for]
+other = "Filtering for"
+
+[remove_filter]
+other = "Remove filter"
+
 [toc_show]
 other = "Show Table of Contents"
 
@@ -12,6 +30,9 @@ other = "Related posts"
 
 [copy]
 other = "Copy"
+
+[copy_code]
+other = "Copy code"
 
 [copied]
 other = "Copied!"

@@ -1,9 +1,9 @@
 {{ define "main" }}
-<content>
+<div class="content">
   {{ if .Data.Singular }}
-  <h3 style="margin-bottom:0">Filtering for "{{ .Title }}"</h3>
+  <h3 class="filter-title">{{ i18n "filtering_for" }} "{{ .Title }}"</h3>
   <small>
-    <a href="{{ "blog" | relURL }}">Remove filter</a>
+    <a href="{{ "blog" | relURL }}">{{ i18n "remove_filter" }}</a>
   </small>
   {{ end }}
 
@@ -81,5 +81,5 @@
     </div>
   </small>
   {{ end }}
-</content>
+</div>
 {{ end }}
