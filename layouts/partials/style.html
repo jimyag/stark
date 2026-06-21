@@ -1,2 +1,33 @@
-{{- $style := resources.Get "css/stark.css" | minify | fingerprint -}}
+{{- $styles := slice
+  (resources.Get "css/base.css")
+  (resources.Get "css/components.css")
+  (resources.Get "css/reading.css")
+  (resources.Get "css/chroma.css")
+-}}
+{{- $style := $styles | resources.Concat "css/stark.css" | minify | fingerprint -}}
+<style>
+@font-face {
+  font-family: "0xProto";
+  src: url("{{ "fonts/0xProto-Regular.woff2" | relURL }}") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "0xProto";
+  src: url("{{ "fonts/0xProto-Bold.woff2" | relURL }}") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "0xProto";
+  src: url("{{ "fonts/0xProto-Italic.woff2" | relURL }}") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+</style>
 <link rel="stylesheet" href="{{ $style.RelPermalink }}" integrity="{{ $style.Data.Integrity }}">

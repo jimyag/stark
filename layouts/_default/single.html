@@ -30,7 +30,7 @@
     </div>
     <p>
       {{ range (.GetTerms "tags") }}
-      <a href="{{ .Permalink }}">#{{ .LinkTitle }}</a>
+      <a href="{{ .RelPermalink }}">#{{ .LinkTitle }}</a>
       {{ end }}
     </p>
 
@@ -47,7 +47,7 @@
       <h2>{{ i18n "related_posts" }}</h2>
       <ul>
         {{- range . -}}
-        <li><a href="{{ .Permalink }}">{{ .Title }}</a></li>
+        <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
         {{- end -}}
       </ul>
     </section>
@@ -58,13 +58,13 @@
     {{- if or $prev $next -}}
     <nav class="post-nav">
       {{- with $prev -}}
-      <a href="{{ .Permalink }}" class="post-nav-prev">
+      <a href="{{ .RelPermalink }}" class="post-nav-prev">
         <span class="post-nav-label">← {{ i18n "prev_post" }}</span>
         <span class="post-nav-title">{{ .Title }}</span>
       </a>
       {{- end -}}
       {{- with $next -}}
-      <a href="{{ .Permalink }}" class="post-nav-next">
+      <a href="{{ .RelPermalink }}" class="post-nav-next">
         <span class="post-nav-label">{{ i18n "next_post" }} →</span>
         <span class="post-nav-title">{{ .Title }}</span>
       </a>

@@ -27,6 +27,17 @@ Live demo: [jimyag.com](https://jimyag.com)
 - i18n — English and Chinese built-in, extensible to any language
 - Dark mode — automatic, follows system preference
 
+## Typography
+
+Stark bundles the 0xProto webfont for Latin text, code, and UI details. The font
+files live in `static/fonts/` and are licensed under the SIL Open Font License;
+see `static/fonts/0xProto-LICENSE.txt`.
+
+Chinese text prefers the local `LXGW WenKai` / `霞鹜文楷` font when it is
+installed on the reader's system. The full LXGW WenKai font is not bundled
+because the regular TTF is about 25 MB; sites that need identical Chinese
+rendering on every device should add a site-level subset font instead.
+
 ## Installation
 
 ```bash

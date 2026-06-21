@@ -1,0 +1,212 @@
+/* ===== Catppuccin-inspired code highlighting ===== */
+pre,
+.highlight,
+.chroma {
+    color: var(--code-text);
+    background: var(--code-bg);
+    border-color: var(--code-border);
+}
+
+pre code,
+.highlight code,
+.highlight pre code,
+.highlight td:last-child code,
+.chroma code,
+.chroma {
+    color: var(--code-text);
+}
+
+.highlight table,
+.highlight table tr,
+.highlight table td,
+.chroma .lntable,
+.chroma .lntd {
+    background: var(--code-bg);
+}
+
+.highlight table td:first-child,
+.chroma .lnt,
+.chroma .ln {
+    color: var(--code-muted);
+    background: color-mix(in srgb, var(--code-bg) 88%, var(--code-selection));
+}
+
+:not(pre) > code {
+    color: var(--code-text);
+    background: var(--code-inline-bg);
+    border-color: var(--code-border);
+}
+
+.chroma .line:hover {
+    background: color-mix(in srgb, var(--code-bg) 78%, var(--code-selection));
+}
+
+.chroma .k,
+.chroma .kc,
+.chroma .kd,
+.chroma .kn,
+.chroma .kp,
+.chroma .kr,
+.chroma .ow {
+    color: var(--code-keyword);
+    font-weight: 600;
+}
+
+.chroma .kt,
+.chroma .nc,
+.chroma .nn,
+.chroma .nt {
+    color: var(--code-type);
+}
+
+.chroma .nf,
+.chroma .fm,
+.chroma .na {
+    color: var(--code-function);
+}
+
+.chroma .s,
+.chroma .sa,
+.chroma .sb,
+.chroma .sc,
+.chroma .dl,
+.chroma .sd,
+.chroma .s2,
+.chroma .se,
+.chroma .sh,
+.chroma .si,
+.chroma .sx,
+.chroma .sr,
+.chroma .s1,
+.chroma .ss {
+    color: var(--code-string);
+}
+
+.chroma .m,
+.chroma .mb,
+.chroma .mf,
+.chroma .mh,
+.chroma .mi,
+.chroma .il,
+.chroma .mo {
+    color: var(--code-number);
+}
+
+.chroma .no,
+.chroma .nd,
+.chroma .ni,
+.chroma .nl,
+.chroma .nb,
+.chroma .bp,
+.chroma .nv,
+.chroma .vc,
+.chroma .vg,
+.chroma .vi,
+.chroma .vm {
+    color: var(--code-constant);
+}
+
+.chroma .c,
+.chroma .ch,
+.chroma .cm,
+.chroma .c1,
+.chroma .cs,
+.chroma .cp,
+.chroma .cpf,
+.chroma .go {
+    color: var(--code-comment);
+    font-style: italic;
+}
+
+.chroma .o,
+.chroma .p,
+.chroma .nx {
+    color: var(--code-text);
+}
+
+.chroma .err,
+.chroma .gd {
+    color: var(--code-error);
+    background: color-mix(in srgb, var(--code-error) 14%, var(--code-bg));
+}
+
+.chroma .gi {
+    color: var(--code-string);
+    background: color-mix(in srgb, var(--code-string) 14%, var(--code-bg));
+}
+
+html[data-theme="dark"] .bg,
+html[data-theme="dark"] .chroma,
+html[data-theme="dark"] pre,
+html[data-theme="dark"] .highlight {
+    color: var(--code-text);
+    background: var(--code-bg);
+    border-color: var(--code-border);
+}
+
+html[data-theme="dark"] pre code,
+html[data-theme="dark"] .highlight code,
+html[data-theme="dark"] .highlight pre code,
+html[data-theme="dark"] .highlight td:last-child code,
+html[data-theme="dark"] .chroma code {
+    color: var(--code-text);
+}
+
+html[data-theme="dark"] .highlight table,
+html[data-theme="dark"] .highlight table tr,
+html[data-theme="dark"] .highlight table td,
+html[data-theme="dark"] .chroma .lntable,
+html[data-theme="dark"] .chroma .lntd {
+    background: var(--code-bg);
+}
+
+html[data-theme="dark"] .highlight table td:first-child,
+html[data-theme="dark"] .chroma .lnt,
+html[data-theme="dark"] .chroma .ln {
+    color: var(--code-muted);
+    background: color-mix(in srgb, var(--code-bg) 88%, var(--code-selection));
+}
+
+html[data-theme="dark"] .chroma :is(.k, .kc, .kd, .kn, .kp, .kr, .ow) {
+    color: var(--code-keyword);
+    font-weight: 600;
+}
+
+html[data-theme="dark"] .chroma :is(.kt, .nc, .nn, .nt) {
+    color: var(--code-type);
+}
+
+html[data-theme="dark"] .chroma :is(.nf, .fm, .na) {
+    color: var(--code-function);
+}
+
+html[data-theme="dark"] .chroma :is(.s, .sa, .sb, .sc, .dl, .sd, .s2, .se, .sh, .si, .sx, .sr, .s1, .ss) {
+    color: var(--code-string);
+}
+
+html[data-theme="dark"] .chroma :is(.m, .mb, .mf, .mh, .mi, .il, .mo) {
+    color: var(--code-number);
+}
+
+html[data-theme="dark"] .chroma :is(.no, .nd, .ni, .nl, .nb, .bp, .nv, .vc, .vg, .vi, .vm) {
+    color: var(--code-constant);
+}
+
+html[data-theme="dark"] .chroma :is(.c, .ch, .cm, .c1, .cs, .cp, .cpf, .go) {
+    color: var(--code-comment);
+    font-style: italic;
+}
+
+html[data-theme="dark"] .chroma :is(.o, .p, .nx) {
+    color: var(--code-text);
+}
+
+html[data-theme="dark"] .chroma :is(.err, .gd) {
+    color: var(--code-error);
+    background: color-mix(in srgb, var(--code-error) 14%, var(--code-bg));
+}
+
+html[data-theme="dark"] .chroma .gi {
+    color: var(--code-string);
+    background: color-mix(in srgb, var(--code-string) 14%, var(--code-bg));
+}

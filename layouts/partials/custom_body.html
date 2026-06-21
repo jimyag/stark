@@ -6,11 +6,17 @@
         return document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'forest';
     }
 
+    const mermaidFontFamily = '"0xProto", "LXGW WenKai", "霞鹜文楷", "STKaiti", "Kaiti SC", ui-monospace, ui-serif, Georgia, serif';
+
     function getMermaidConfig() {
         return {
             startOnLoad: false,
             theme: getMermaidTheme(),
             securityLevel: 'loose',
+            fontFamily: mermaidFontFamily,
+            themeVariables: {
+                fontFamily: mermaidFontFamily
+            },
             flowchart: {
                 useMaxWidth: true,
                 htmlLabels: true

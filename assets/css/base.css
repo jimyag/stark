@@ -1,0 +1,207 @@
+  :root {
+    --font-mono: "0xProto", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    --font-body: "0xProto", "LXGW WenKai", "霞鹜文楷", "STKaiti", "Kaiti SC", ui-monospace, ui-serif, Georgia, serif;
+    --font-heading: var(--font-body);
+    --theme: #fbfaf7;
+    --entry: #fffefd;
+    --primary: #2f2b26;
+    --secondary: #7a746c;
+    --tertiary: #e8e1d8;
+    --content: #3f3a34;
+    --code-bg: #f8f9fc;
+    --code-inline-bg: #f1f2f7;
+    --code-text: #4c4f69;
+    --code-muted: #7c7f93;
+    --code-border: #ccd0da;
+    --code-selection: #dce0e8;
+    --code-keyword: #8839ef;
+    --code-function: #1e66f5;
+    --code-string: #40a02b;
+    --code-number: #fe640b;
+    --code-type: #df8e1d;
+    --code-constant: #209fb5;
+    --code-comment: #6c6f85;
+    --code-error: #d20f39;
+    --border: #e5ded4;
+    --surface-muted: #f7f3ee;
+    --surface-subtle: #efe8df;
+    --link: #8f5f2f;
+    --link-hover: #6f451f;
+    --link-visited: #745c8f;
+    --focus: #a66a2c;
+    --notion-card: #fffdf9;
+    --notion-shadow: 0 1px 2px rgba(40, 34, 28, 0.05), 0 14px 40px rgba(40, 34, 28, 0.06);
+  }
+
+  html[data-theme="dark"] {
+    --theme: #171614;
+    --entry: #22211f;
+    --primary: #f3f0ea;
+    --secondary: #aaa49b;
+    --tertiary: #4a443c;
+    --content: #d9d3ca;
+    --code-bg: #11111b;
+    --code-inline-bg: #1e1e2e;
+    --code-text: #cdd6f4;
+    --code-muted: #9399b2;
+    --code-border: #313244;
+    --code-selection: #45475a;
+    --code-keyword: #cba6f7;
+    --code-function: #89b4fa;
+    --code-string: #a6e3a1;
+    --code-number: #fab387;
+    --code-type: #f9e2af;
+    --code-constant: #74c7ec;
+    --code-comment: #a6adc8;
+    --code-error: #f38ba8;
+    --border: #3b3832;
+    --surface-muted: #262421;
+    --surface-subtle: #302c27;
+    --link: #d7aa74;
+    --link-hover: #f0c48d;
+    --link-visited: #c7abd9;
+    --focus: #d7aa74;
+    --notion-card: #22211f;
+    --notion-shadow: 0 1px 2px rgba(0, 0, 0, 0.28), 0 16px 44px rgba(0, 0, 0, 0.26);
+  }
+
+  body {
+    font-family: var(--font-body);
+    margin: auto;
+    padding: 20px;
+    max-width: 720px;
+    text-align: left;
+    background-color: var(--theme);
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    line-height: 1.5;
+    color: var(--content);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  strong,
+  b {
+    color: var(--primary);
+  }
+
+  a {
+    color: var(--link);
+  }
+
+  .title {
+    text-decoration: none;
+    border: 0;
+  }
+
+  .title span {
+    font-weight: 400;
+  }
+
+  nav a {
+    margin-right: 10px;
+  }
+
+  textarea {
+    width: 100%;
+    font-size: 16px;
+  }
+
+  input {
+    font-size: 16px;
+  }
+
+  .content {
+    line-height: 1.6;
+  }
+
+  table {
+    width: 100%;
+  }
+
+  img {
+    max-width: 100%;
+  }
+
+  code {
+    font-family: var(--font-mono);
+    padding: 2px 5px;
+    background-color: var(--code-inline-bg);
+  }
+
+  pre {
+    font-family: var(--font-mono);
+    background-color: var(--code-bg);
+    color: var(--primary);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow-x: auto;
+  }
+
+  pre code {
+    color: var(--primary);
+    display: block;
+    padding: 20px;
+    white-space: pre-wrap;
+    font-size: 14px;
+    overflow-x: auto;
+  }
+
+  div.highlight pre {
+    background-color: initial;
+    color: initial;
+  }
+
+  div.highlight code {
+    background-color: unset;
+    color: unset;
+  }
+
+  blockquote {
+    border-left: 1px solid var(--border);
+    color: var(--primary);
+    padding-left: 20px;
+    font-style: italic;
+  }
+
+  footer {
+    padding: 25px;
+    text-align: center;
+  }
+
+  .helptext {
+    color: var(--secondary);
+    font-size: small;
+  }
+
+  .errorlist {
+    color: #eba613;
+    font-size: small;
+  }
+
+  ul.blog-posts {
+    list-style-type: none;
+    padding: unset;
+  }
+
+  ul.blog-posts li {
+    display: flex;
+  }
+
+  ul.blog-posts li span {
+    flex: 0 0 130px;
+  }
+
+  ul.blog-posts li a:visited {
+    color: var(--link-visited);
+  }
+
+  :is(textarea, input) {
+    background-color: var(--entry);
+    color: var(--content);
+    border: 1px solid var(--border);
+  }

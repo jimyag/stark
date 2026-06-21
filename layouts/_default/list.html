@@ -18,7 +18,7 @@
       {{ range sort . "Weight" }}
       <li>
         <span><i><time datetime='{{ .Date.Format "2006-01-02" }}' pubdate>{{ .Date.Format "2006-01-02" }}</time></i></span>
-        <a href="{{ .Permalink }}">{{ .Title }}</a>
+        <a href="{{ .RelPermalink }}">{{ .Title }}</a>
       </li>
       {{ end }}
     </ul>
@@ -35,7 +35,7 @@
       {{ range .Pages }}
       <li>
         <span><i><time datetime='{{ .Date.Format "2006-01-02" }}' pubdate>{{ .Date.Format "2006-01-02" }}</time></i></span>
-        <a href="{{ .Permalink }}">{{ .Title }}</a>
+        <a href="{{ .RelPermalink }}">{{ .Title }}</a>
       </li>
       {{ end }}
     </ul>
@@ -76,7 +76,7 @@
   <small>
     <div>
       {{ range .Site.Taxonomies.tags }}
-      <a href="{{ .Page.Permalink }}">#{{ .Page.Title }}</a>&nbsp;
+      <a href="{{ .Page.RelPermalink }}">#{{ .Page.Title }}</a>&nbsp;
       {{ end }}
     </div>
   </small>
