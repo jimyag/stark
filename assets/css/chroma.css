@@ -7,6 +7,14 @@ pre,
     border-color: var(--code-border);
 }
 
+.highlight {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--code-border);
+    border-radius: 12px;
+    background: var(--code-bg);
+}
+
 pre code,
 .highlight code,
 .highlight pre code,
@@ -16,19 +24,93 @@ pre code,
     color: var(--code-text);
 }
 
+.highlight pre {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    overflow: auto;
+}
+
+.highlight pre code {
+    display: block;
+    padding: 1.1rem 1.2rem;
+}
+
+.highlight:has(.code-lang) pre code {
+    padding-top: 2.25rem;
+}
+
+.highlight .chroma {
+    margin: 0;
+    background: transparent;
+}
+
 .highlight table,
+.highlight .lntable,
 .highlight table tr,
 .highlight table td,
 .chroma .lntable,
 .chroma .lntd {
-    background: var(--code-bg);
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    background: transparent;
+}
+
+.highlight table,
+.highlight .lntable {
+    width: 100%;
+    max-width: none;
+    display: table;
+    overflow: visible;
+    border-spacing: 0;
+    border-collapse: separate;
+}
+
+.highlight table tr:nth-child(even) {
+    background: transparent;
+}
+
+.highlight .lntd {
+    padding: 0;
+    vertical-align: top;
+}
+
+.highlight .lntd:first-child {
+    width: 3.6rem;
+    border-right: 1px solid var(--code-border);
+    background: color-mix(in srgb, var(--code-bg) 88%, var(--code-selection));
+}
+
+.highlight .lntd:first-child pre,
+.highlight .lntd:first-child code {
+    overflow: hidden;
+}
+
+.highlight .lntd:first-child code {
+    padding: 1.1rem 0.85rem 1.1rem 0.7rem !important;
+}
+
+.highlight:has(.code-lang) .lntd:first-child code {
+    padding-top: 2.25rem !important;
 }
 
 .highlight table td:first-child,
 .chroma .lnt,
 .chroma .ln {
     color: var(--code-muted);
-    background: color-mix(in srgb, var(--code-bg) 88%, var(--code-selection));
+    background: transparent;
+}
+
+.highlight .lnt,
+.highlight .ln {
+    display: block;
+    margin: 0;
+    padding: 0;
+    text-align: right;
 }
 
 :not(pre) > code {
@@ -153,17 +235,22 @@ html[data-theme="dark"] .chroma code {
 }
 
 html[data-theme="dark"] .highlight table,
+html[data-theme="dark"] .highlight .lntable,
 html[data-theme="dark"] .highlight table tr,
 html[data-theme="dark"] .highlight table td,
 html[data-theme="dark"] .chroma .lntable,
 html[data-theme="dark"] .chroma .lntd {
-    background: var(--code-bg);
+    background: transparent;
 }
 
 html[data-theme="dark"] .highlight table td:first-child,
 html[data-theme="dark"] .chroma .lnt,
 html[data-theme="dark"] .chroma .ln {
     color: var(--code-muted);
+    background: transparent;
+}
+
+html[data-theme="dark"] .highlight .lntd:first-child {
     background: color-mix(in srgb, var(--code-bg) 88%, var(--code-selection));
 }
 
