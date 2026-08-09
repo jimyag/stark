@@ -1,5 +1,6 @@
 {{ define "main" }}
-<div class="article-wrapper">
+{{- $hasTOC := and .TableOfContents (gt (len .TableOfContents) 100) -}}
+<div class="article-wrapper{{ if $hasTOC }} has-toc{{ end }}">
   <article>
     {{ if eq .Type "blog" }}{{ if not .Params.menu }}
     {{- $markdownOutput := .OutputFormats.Get "MARKDOWN" -}}

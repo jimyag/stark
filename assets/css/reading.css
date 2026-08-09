@@ -55,7 +55,13 @@ body > nav .search-trigger:hover {
 }
 
 article {
-    max-width: 760px;
+    max-width: 820px;
+}
+
+@media (min-width: 1401px) {
+    .article-wrapper.has-toc > article {
+        max-width: 880px;
+    }
 }
 
 article > h1 {
@@ -206,7 +212,14 @@ pre code {
 .pinned-section,
 .related-posts,
 .post-nav {
-    max-width: 760px;
+    max-width: 820px;
+}
+
+@media (min-width: 1401px) {
+    .article-wrapper.has-toc .related-posts,
+    .article-wrapper.has-toc .post-nav {
+        max-width: 880px;
+    }
 }
 
 ul.blog-posts li {
@@ -436,4 +449,3 @@ html[data-theme="dark"] :not(pre) > code {
         max-width: none;
     }
 }
-
