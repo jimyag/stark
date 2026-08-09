@@ -3,7 +3,7 @@ baseURL = "https://example.com"
 theme = "stark"
 title = "ᕕ( ᐛ )ᕗ My Blog"
 copyright = "Copyright © 2024, Your Name."
-languageCode = "zh-CN"
+locale = "zh-CN"
 [pagination]
   pagerSize = 20
 

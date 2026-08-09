@@ -6,7 +6,7 @@
     <lastmod>{{ .Format "2006-01-02T15:04:05-07:00" }}</lastmod>
     {{- end -}}
   </url>
-  {{- range where .Site.AllPages "Kind" "in" (slice "section" "page") -}}
+  {{- range where .Site.Pages "Kind" "in" (slice "section" "page") -}}
   <url>
     <loc>{{ .Permalink }}</loc>
     {{- with .Lastmod -}}

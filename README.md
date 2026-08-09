@@ -60,7 +60,7 @@ baseURL = "https://example.com"
 theme      = "stark"
 title      = "ᕕ( ᐛ )ᕗ My Blog"
 copyright  = "Copyright © 2024, Your Name."
-languageCode = "zh-CN"
+locale       = "zh-CN"
 
 enableRobotsTXT = true
 
@@ -359,7 +359,7 @@ Both can be set at the same time. Neither script is injected unless the correspo
 The theme ships with English (`en`) and Chinese (`zh-CN`) translations. To use English:
 
 ```toml
-languageCode = "en-US"
+locale = "en-US"
 defaultContentLanguage = "en"
 ```
 
