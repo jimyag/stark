@@ -22,6 +22,21 @@ other = "移除筛选"
 [toc_show]
 other = "显示目录"
 
+[toc_close]
+other = "关闭目录"
+
+[palette]
+other = "配色"
+
+[palette_paper]
+other = "纸张"
+
+[palette_ocean]
+other = "海洋"
+
+[palette_forest]
+other = "森林"
+
 [pinned]
 other = "置顶"
 
@@ -98,7 +113,10 @@ other = "缩小图片"
 other = "关闭图片预览"
 
 [image_click_zoom]
-other = "点击放大图表"
+other = "打开预览"
+
+[image_preview]
+other = "图片预览"
 
 [no_posts]
 other = "暂无文章"

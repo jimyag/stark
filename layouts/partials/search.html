@@ -1,7 +1,9 @@
 <!-- Search modal -->
-<div id="search-modal" hidden>
+<div id="search-modal" role="dialog" aria-modal="true" aria-labelledby="search-title" hidden>
+  <h2 id="search-title" class="visually-hidden">{{ i18n "search" }}</h2>
   <div id="search-box">
-    <input type="text" id="search-input" placeholder="{{ i18n "search_placeholder" }}" autocomplete="off">
+    <label class="visually-hidden" for="search-input">{{ i18n "search" }}</label>
+    <input type="search" id="search-input" placeholder="{{ i18n "search_placeholder" }}" autocomplete="off">
     <button type="button" id="search-close" aria-label="{{ i18n "search_close" }}">&times;</button>
   </div>
   <ul id="search-results"></ul>

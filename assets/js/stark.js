@@ -56,6 +56,34 @@
     }
   }
 
+  function initPalettePicker() {
+    const root = document.documentElement;
+    const picker = document.querySelector('.palette-picker');
+    const options = [...document.querySelectorAll('.palette-options [data-palette]')];
+    const palettes = new Set(['paper', 'ocean', 'forest']);
+    if (!picker || !options.length) return;
+
+    function applyPalette(palette, persist) {
+      if (!palettes.has(palette)) palette = 'paper';
+      root.setAttribute('data-palette', palette);
+      options.forEach(option => {
+        option.setAttribute('aria-pressed', option.dataset.palette === palette ? 'true' : 'false');
+      });
+      if (persist) {
+        localStorage.setItem('stark-palette', palette);
+        document.dispatchEvent(new CustomEvent('stark:palette-change', { detail: { palette } }));
+      }
+    }
+
+    applyPalette(root.getAttribute('data-palette') || 'paper', false);
+    options.forEach(option => {
+      option.addEventListener('click', () => {
+        applyPalette(option.dataset.palette, true);
+        picker.open = false;
+      });
+    });
+  }
+
   function initCodeCopy() {
     async function writeText(text) {
       if (navigator.clipboard && window.isSecureContext) {
@@ -94,7 +122,7 @@
     // button has to be attached to those blocks too.
     const blocks = [...document.querySelectorAll('.highlight')];
     document.querySelectorAll('main .content pre').forEach(pre => {
-      if (!pre.closest('.highlight')) blocks.push(pre);
+      if (!pre.closest('.highlight') && !pre.classList.contains('mermaid')) blocks.push(pre);
     });
 
     blocks.forEach(block => {
@@ -150,7 +178,8 @@
     }, { passive: true });
 
     btn.addEventListener('click', () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      const behavior = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
+      window.scrollTo({ top: 0, behavior });
     });
   }
 
@@ -173,16 +202,21 @@
     const contentRoot = document.querySelector('main .content');
     if (!contentRoot) return;
 
-    const images = contentRoot.querySelectorAll('img');
+    const images = [...contentRoot.querySelectorAll('img')]
+      .filter(img => !img.closest('a'));
     if (!images.length) return;
 
     const lightbox = document.createElement('div');
     lightbox.className = 'image-lightbox';
+    lightbox.setAttribute('role', 'dialog');
+    lightbox.setAttribute('aria-modal', 'true');
+    lightbox.setAttribute('aria-label', i18n.imagePreview || 'Image preview');
     lightbox.setAttribute('aria-hidden', 'true');
 
     const preview = document.createElement('img');
     preview.alt = '';
     let zoomLevel = 1;
+    let lastFocus = null;
     const minZoom = 0.5;
     const maxZoom = 4;
     const zoomStep = 0.2;
@@ -227,6 +261,8 @@
       preview.removeAttribute('src');
       zoomLevel = 1;
       applyZoom();
+      if (lastFocus) lastFocus.focus();
+      lastFocus = null;
     }
 
     function zoomIn() {
@@ -240,8 +276,14 @@
     }
 
     images.forEach((img) => {
-      img.addEventListener('click', (event) => {
+      img.classList.add('image-lightbox-trigger');
+      img.setAttribute('role', 'button');
+      img.setAttribute('tabindex', '0');
+      img.setAttribute('aria-label', i18n.imageClickZoom || 'Open image preview');
+
+      function openFromImage(event) {
         event.preventDefault();
+        lastFocus = img;
         preview.src = img.currentSrc || img.src;
         preview.alt = img.alt || '';
         zoomLevel = 1;
@@ -249,6 +291,12 @@
         lightbox.classList.add('active');
         lightbox.setAttribute('aria-hidden', 'false');
         document.body.style.overflow = 'hidden';
+        closeBtn.focus();
+      }
+
+      img.addEventListener('click', openFromImage);
+      img.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') openFromImage(event);
       });
     });
 
@@ -272,6 +320,19 @@
       if (event.key === '-' || event.key === '_') {
         event.preventDefault();
         zoomOut();
+        return;
+      }
+      if (event.key === 'Tab') {
+        const focusable = [zoomOutBtn, zoomInBtn, closeBtn];
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first.focus();
+        }
       }
     });
   }
@@ -284,9 +345,12 @@
     const openBtn = document.getElementById('search-btn');
     const closeBtn = document.getElementById('search-close');
     if (!modal || !input || !results || !openBtn || !closeBtn) return;
+    let lastFocus = null;
 
     function openSearch() {
+      lastFocus = document.activeElement;
       modal.hidden = false;
+      document.body.style.overflow = 'hidden';
       input.value = '';
       results.innerHTML = '';
       input.focus();
@@ -295,6 +359,9 @@
 
     function closeSearch() {
       modal.hidden = true;
+      document.body.style.overflow = '';
+      if (lastFocus) lastFocus.focus();
+      lastFocus = null;
     }
 
     async function loadIndex() {
@@ -376,6 +443,20 @@
     openBtn.addEventListener('click', openSearch);
     closeBtn.addEventListener('click', closeSearch);
     modal.addEventListener('click', e => { if (e.target === modal) closeSearch(); });
+    modal.addEventListener('keydown', e => {
+      if (e.key !== 'Tab') return;
+      const focusable = [...modal.querySelectorAll('input, button, a[href]')];
+      if (!focusable.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    });
     input.addEventListener('input', e => search(e.target.value));
 
     document.addEventListener('keydown', e => {
@@ -390,6 +471,7 @@
   document.addEventListener('DOMContentLoaded', function() {
     initReadingProgress();
     initThemeToggle();
+    initPalettePicker();
     initCodeCopyWhenReady();
     initBackToTop();
     initCodeLanguageLabels();

@@ -2,7 +2,7 @@
 <html lang="{{ with .Site.Language.Locale }}{{ . }}{{ else }}en-US{{ end }}">
 
 <head>
-  <script>!function(){var t=localStorage.getItem('stark-theme');t?document.documentElement.setAttribute('data-theme',t):window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches&&document.documentElement.setAttribute('data-theme','dark')}();</script>
+  <script>!function(){var e=document.documentElement,t=localStorage.getItem('stark-theme'),p=localStorage.getItem('stark-palette');t?e.setAttribute('data-theme',t):window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches&&e.setAttribute('data-theme','dark');p&&e.setAttribute('data-palette',p)}();</script>
   <meta http-equiv="X-Clacks-Overhead" content="GNU Terry Pratchett" />
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -24,10 +24,11 @@
 </head>
 
 <body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
   <header>
     {{- partial "header.html" . -}}
   </header>
-  <main>
+  <main id="main-content">
     {{- block "main" . }}{{- end }}
   </main>
   <footer>

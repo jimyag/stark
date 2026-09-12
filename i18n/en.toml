@@ -22,6 +22,21 @@ other = "Remove filter"
 [toc_show]
 other = "Show Table of Contents"
 
+[toc_close]
+other = "Close table of contents"
+
+[palette]
+other = "Palette"
+
+[palette_paper]
+other = "Paper"
+
+[palette_ocean]
+other = "Ocean"
+
+[palette_forest]
+other = "Forest"
+
 [pinned]
 other = "Pinned"
 
@@ -98,7 +113,10 @@ other = "Zoom out"
 other = "Close"
 
 [image_click_zoom]
-other = "Click to zoom"
+other = "Open preview"
+
+[image_preview]
+other = "Image preview"
 
 [no_posts]
 other = "No posts yet"

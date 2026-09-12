@@ -6,5 +6,13 @@
 <a href="{{ "blog" | relURL }}">{{ i18n "blog" }}</a>
 {{ end }}
 <button type="button" id="theme-toggle" class="search-trigger theme-toggle" aria-label="{{ i18n "theme_dark" }}">◑</button>
+<details class="palette-picker">
+  <summary>{{ i18n "palette" }}</summary>
+  <div class="palette-options" role="group" aria-label="{{ i18n "palette" }}">
+    <button type="button" data-palette="paper" aria-pressed="true"><span class="palette-swatch palette-swatch-paper" aria-hidden="true"></span>{{ i18n "palette_paper" }}</button>
+    <button type="button" data-palette="ocean" aria-pressed="false"><span class="palette-swatch palette-swatch-ocean" aria-hidden="true"></span>{{ i18n "palette_ocean" }}</button>
+    <button type="button" data-palette="forest" aria-pressed="false"><span class="palette-swatch palette-swatch-forest" aria-hidden="true"></span>{{ i18n "palette_forest" }}</button>
+  </div>
+</details>
 <button type="button" id="search-btn" class="search-trigger">{{ i18n "search" }}</button>
 {{- partial "search.html" . -}}

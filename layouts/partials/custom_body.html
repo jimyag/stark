@@ -40,7 +40,13 @@
         });
 
         mermaid.initialize(getMermaidConfig());
-        await mermaid.run({ querySelector: '.mermaid' });
+        for (const [index, block] of mermaidBlocks.entries()) {
+            try {
+                await mermaid.run({ nodes: [block] });
+            } catch (error) {
+                console.error(`Mermaid render failed at diagram ${index + 1}`, error);
+            }
+        }
         addMermaidClickHandlers();
     }
     
@@ -76,6 +82,7 @@
         const svg = mermaidEl.querySelector('svg');
         
         if (!svg) return;
+        mermaidLastFocus = mermaidEl;
         
         // 克隆 SVG
         const clonedSvg = svg.cloneNode(true);
@@ -88,8 +95,10 @@
         container.appendChild(clonedSvg);
         
         lightbox.classList.add('active');
+        lightbox.hidden = false;
         lightbox.setAttribute('aria-hidden', 'false');
         document.body.style.overflow = 'hidden';
+        document.querySelector('.mermaid-lightbox-controls button').focus();
         
         // 重置状态
         lightbox.dataset.zoom = '1';
@@ -105,9 +114,12 @@
     function closeMermaidLightbox() {
         const lightbox = document.getElementById('mermaid-lightbox');
         lightbox.classList.remove('active');
+        lightbox.hidden = true;
         lightbox.setAttribute('aria-hidden', 'true');
         document.body.style.overflow = '';
         document.getElementById('mermaid-lightbox-container').innerHTML = '';
+        if (mermaidLastFocus) mermaidLastFocus.focus();
+        mermaidLastFocus = null;
         
         // 重置拖拽状态
         isDragging = false;
@@ -137,6 +149,7 @@
     let startY = 0;
     let currentX = 0;
     let currentY = 0;
+    let mermaidLastFocus = null;
     
     // 使用事件委托处理拖拽和滚轮
     document.addEventListener('mousedown', (e) => {
@@ -292,6 +305,17 @@
         
         if (e.key === 'Escape') {
             closeMermaidLightbox();
+        } else if (e.key === 'Tab') {
+            const focusable = [...lightbox.querySelectorAll('button')];
+            const first = focusable[0];
+            const last = focusable[focusable.length - 1];
+            if (e.shiftKey && document.activeElement === first) {
+                e.preventDefault();
+                last.focus();
+            } else if (!e.shiftKey && document.activeElement === last) {
+                e.preventDefault();
+                first.focus();
+            }
         } else if (e.key === ' ' || e.key === '0') {
             // 空格键或0键重置视图
             e.preventDefault();
@@ -305,7 +329,7 @@
 </script>
 
 <!-- Mermaid Lightbox HTML -->
-<div id="mermaid-lightbox" class="mermaid-lightbox" aria-hidden="true">
+<div id="mermaid-lightbox" class="mermaid-lightbox" role="dialog" aria-modal="true" aria-label="{{ i18n "mermaid_preview" }}" aria-hidden="true" hidden>
     <div id="mermaid-lightbox-container"></div>
     <div class="mermaid-lightbox-controls">
         <button onclick="mermaidZoomOut()" aria-label="{{ i18n "mermaid_zoom_out" }}">−</button>

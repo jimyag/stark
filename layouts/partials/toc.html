@@ -11,14 +11,14 @@
 </aside>
 
 <!-- Floating TOC button (narrow screen) -->
-<button class="toc-toggle" aria-label="{{ i18n "toc_show" }}">{{ i18n "toc" }}</button>
+<button type="button" class="toc-toggle" aria-label="{{ i18n "toc_show" }}" aria-controls="toc-modal" aria-expanded="false">{{ i18n "toc" }}</button>
 
 <!-- TOC modal panel (narrow screen) -->
-<div class="toc-modal">
+<div id="toc-modal" class="toc-modal" role="dialog" aria-modal="true" aria-labelledby="toc-modal-title" hidden>
   <div class="toc-modal-content">
     <div class="toc-modal-header">
-      <span>{{ i18n "toc" }}</span>
-      <button class="toc-modal-close">&times;</button>
+      <h2 id="toc-modal-title">{{ i18n "toc" }}</h2>
+      <button type="button" class="toc-modal-close" aria-label="{{ i18n "toc_close" }}">&times;</button>
     </div>
     <nav>
       {{ $toc }}
@@ -31,27 +31,56 @@
   const toggle = document.querySelector('.toc-toggle');
   const modal = document.querySelector('.toc-modal');
   const closeBtn = document.querySelector('.toc-modal-close');
+  let lastFocus;
 
   if (!toggle || !modal) return;
 
   toggle.addEventListener('click', () => {
+    lastFocus = document.activeElement;
     modal.classList.add('active');
+    modal.hidden = false;
+    toggle.setAttribute('aria-expanded', 'true');
+    closeBtn.focus();
   });
 
-  closeBtn.addEventListener('click', () => {
+  function closeModal() {
     modal.classList.remove('active');
-  });
+    modal.hidden = true;
+    toggle.setAttribute('aria-expanded', 'false');
+    if (lastFocus) lastFocus.focus();
+  }
+
+  closeBtn.addEventListener('click', closeModal);
 
   modal.addEventListener('click', (e) => {
     if (e.target === modal) {
-      modal.classList.remove('active');
+      closeModal();
     }
   });
 
   modal.querySelectorAll('a').forEach(link => {
     link.addEventListener('click', () => {
-      modal.classList.remove('active');
+      closeModal();
     });
+  });
+
+  modal.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeModal();
+      return;
+    }
+    if (e.key !== 'Tab') return;
+    const focusable = [...modal.querySelectorAll('button, a[href]')];
+    if (!focusable.length) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
   });
 })();
 </script>

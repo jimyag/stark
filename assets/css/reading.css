@@ -1,18 +1,22 @@
 /* ===== Notion-inspired reading refresh ===== */
 html {
     background:
-        radial-gradient(circle at 42% 0, rgba(143, 95, 47, 0.055), transparent 34rem),
+        radial-gradient(circle at 42% 0, var(--theme-glow), transparent 34rem),
         var(--theme);
 }
 
 body {
     max-width: 920px;
-    padding: 28px 24px 56px;
+    padding: 28px 24px calc(56px + env(safe-area-inset-bottom));
     background: transparent;
     color: var(--content);
     font-size: 17px;
     line-height: 1.62;
     letter-spacing: 0;
+}
+
+body > header {
+    margin-block: 0 0.85rem;
 }
 
 .title h2 {
@@ -29,7 +33,7 @@ body {
     margin-bottom: 0.85rem;
 }
 
-body > nav {
+body > header nav {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
@@ -39,20 +43,92 @@ body > nav {
     border-bottom: 1px solid var(--border);
 }
 
-body > nav a,
-body > nav .search-trigger {
-    margin-right: 0;
+body > header nav a,
+body > header nav .search-trigger {
+    margin-inline-end: 0;
+    min-height: 40px;
     padding: 0.32rem 0.58rem;
     color: var(--secondary);
     border-radius: 7px;
 }
 
-body > nav a:hover,
-body > nav .search-trigger:hover {
+body > header nav a:hover,
+body > header nav .search-trigger:hover {
     color: var(--primary);
     background: var(--surface-muted);
     text-decoration: none;
 }
+
+body > header nav .palette-picker {
+    position: relative;
+}
+
+body > header nav .palette-picker summary {
+    display: flex;
+    align-items: center;
+    min-height: 40px;
+    padding: 0.32rem 0.58rem;
+    color: var(--secondary);
+    border-radius: 7px;
+    cursor: pointer;
+    list-style: none;
+}
+
+body > header nav .palette-picker summary::-webkit-details-marker {
+    display: none;
+}
+
+body > header nav .palette-picker summary:hover {
+    color: var(--primary);
+    background: var(--surface-muted);
+}
+
+.palette-options {
+    position: absolute;
+    inset-inline-end: 0;
+    top: calc(100% + 0.35rem);
+    z-index: 2000;
+    display: grid;
+    gap: 0.2rem;
+    min-width: 9rem;
+    padding: 0.4rem;
+    background: var(--entry);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    box-shadow: var(--notion-shadow);
+}
+
+.palette-options button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    min-height: 36px;
+    padding: 0.35rem 0.5rem;
+    color: var(--primary);
+    background: transparent;
+    border: 0;
+    border-radius: 7px;
+    cursor: pointer;
+    text-align: start;
+}
+
+.palette-options button:hover,
+.palette-options button[aria-pressed="true"] {
+    background: var(--surface-muted);
+}
+
+.palette-swatch {
+    width: 0.9rem;
+    height: 0.9rem;
+    flex: 0 0 auto;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+}
+
+.palette-swatch-paper { background: #8f5f2f; }
+.palette-swatch-ocean { background: #16627f; }
+.palette-swatch-forest { background: #356c4e; }
 
 article {
     max-width: 820px;
@@ -101,6 +177,7 @@ article > h1 {
 
 .content p {
     margin: 0.82rem 0;
+    text-wrap: pretty;
 }
 
 .post-meta-row,
@@ -125,8 +202,9 @@ blockquote {
     padding: 0.1rem 1rem;
     color: var(--secondary);
     background: var(--surface-muted);
-    border-left: 3px solid var(--tertiary);
-    border-radius: 0 8px 8px 0;
+    border-inline-start: 3px solid var(--tertiary);
+    border-start-end-radius: 8px;
+    border-end-end-radius: 8px;
     font-style: normal;
 }
 
@@ -251,7 +329,7 @@ ul.blog-posts li a {
 }
 
 .toc {
-    left: max(1rem, calc((100vw - 920px) / 2 - 290px));
+    inset-inline-start: max(1rem, calc((100vw - 920px) / 2 - 290px));
     width: 200px;
     padding: 0.75rem 0.85rem;
     background: color-mix(in srgb, var(--entry) 82%, transparent);
@@ -325,8 +403,9 @@ ul.blog-posts li a {
 }
 
 .callout {
-    border-left-width: 3px;
-    border-radius: 0 10px 10px 0;
+    border-inline-start-width: 3px;
+    border-start-end-radius: 10px;
+    border-end-end-radius: 10px;
     background: var(--surface-muted);
 }
 
@@ -367,20 +446,21 @@ footer {
 
 html[data-theme="dark"] {
     background:
-        radial-gradient(circle at 42% 0, rgba(215, 170, 116, 0.065), transparent 34rem),
+        radial-gradient(circle at 42% 0, var(--theme-glow), transparent 34rem),
         var(--theme);
 }
 
-html[data-theme="dark"] body > nav {
+html[data-theme="dark"] body > header nav {
     border-bottom-color: var(--border);
 }
 
-html[data-theme="dark"] body > nav a:hover,
-html[data-theme="dark"] body > nav .search-trigger:hover,
+html[data-theme="dark"] body > header nav a:hover,
+html[data-theme="dark"] body > header nav .search-trigger:hover,
+html[data-theme="dark"] body > header nav .palette-picker summary:hover,
 html[data-theme="dark"] .toc nav a:hover,
 html[data-theme="dark"] .post-nav a:hover,
 html[data-theme="dark"] .details-block summary:hover {
-    background: #33302b;
+    background: var(--surface-subtle);
 }
 
 html[data-theme="dark"] blockquote,
@@ -389,7 +469,7 @@ html[data-theme="dark"] .callout.callout-note,
 html[data-theme="dark"] .callout.callout-tip,
 html[data-theme="dark"] .callout.callout-warning,
 html[data-theme="dark"] .callout.callout-danger {
-    background: #25231f;
+    background: var(--surface-muted);
     border-color: var(--tertiary);
 }
 
@@ -400,30 +480,30 @@ html[data-theme="dark"] #search-box,
 html[data-theme="dark"] #search-results,
 html[data-theme="dark"] .details-block,
 html[data-theme="dark"] .post-nav a {
-    background: #22211f;
-    border-color: #3f3b35;
+    background: var(--entry);
+    border-color: var(--border);
 }
 
 html[data-theme="dark"] table th,
 html[data-theme="dark"] .details-block summary {
-    background: #2a2824;
+    background: var(--surface-subtle);
 }
 
 html[data-theme="dark"] table tr:nth-child(even),
 html[data-theme="dark"] #search-results li:hover,
 html[data-theme="dark"] #search-results .tags span {
-    background: #25231f;
+    background: var(--surface-muted);
 }
 
 html[data-theme="dark"] :not(pre) > code {
-    color: #ebe5dc;
-    background: #302d29;
-    border-color: #4a443c;
+    color: var(--code-text);
+    background: var(--code-inline-bg);
+    border-color: var(--code-border);
 }
 
 @media (max-width: 768px) {
     body {
-        padding: 20px 18px 48px;
+        padding: 20px 18px calc(48px + env(safe-area-inset-bottom));
         font-size: 17px;
     }
 
