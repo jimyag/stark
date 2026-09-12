@@ -260,9 +260,9 @@ pre code {
 }
 
 pre.mermaid {
-    width: fit-content;
+    width: 100%;
     max-width: 100%;
-    margin-inline: auto;
+    margin-inline: 0;
     padding: clamp(1rem, 2vw, 1.5rem);
     overflow-x: auto;
     text-align: center;

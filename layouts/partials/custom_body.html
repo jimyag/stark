@@ -32,6 +32,16 @@
         };
     }
 
+    function preserveMermaidSize(block) {
+        const svg = block.querySelector('svg');
+        const viewBox = svg?.viewBox?.baseVal;
+        if (!viewBox?.width || !viewBox?.height) return;
+
+        svg.style.width = `${viewBox.width}px`;
+        svg.style.height = `${viewBox.height}px`;
+        svg.style.maxWidth = 'none';
+    }
+
     async function renderMermaids() {
         const mermaidBlocks = document.querySelectorAll('.mermaid');
         if (mermaidBlocks.length === 0) return;
@@ -48,6 +58,7 @@
         for (const [index, block] of mermaidBlocks.entries()) {
             try {
                 await mermaid.run({ nodes: [block] });
+                preserveMermaidSize(block);
             } catch (error) {
                 console.error(`Mermaid render failed at diagram ${index + 1}`, error);
             }
