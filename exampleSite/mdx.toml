@@ -1,0 +1,21 @@
+# Merge compiled MDX pages with the site's ordinary content and bundle resources.
+[[module.mounts]]
+source = '.stark-mdx/content'
+target = 'content'
+
+[[module.mounts]]
+source = 'content'
+target = 'content'
+files = ['! **/*.mdx', '! **/*.jsx', '! **/*.tsx']
+
+[[module.mounts]]
+source = '.stark-mdx/static'
+target = 'static'
+
+[[module.mounts]]
+source = 'static'
+target = 'static'
+
+# Permit the pre-rendered HTML pages produced by the MDX compiler.
+[security]
+allowContent = ['! ^text/org$']

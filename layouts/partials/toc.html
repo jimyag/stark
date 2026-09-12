@@ -1,10 +1,11 @@
-{{ if and .TableOfContents (gt (len .TableOfContents) 100) }}
+{{- $toc := partial "article-toc.html" . -}}
+{{ if and $toc (gt (len $toc) 100) }}
 <!-- Sidebar TOC (wide screen) -->
 <aside class="toc toc-sidebar">
   <details open>
     <summary>{{ i18n "toc" }}</summary>
     <nav>
-      {{ .TableOfContents }}
+      {{ $toc }}
     </nav>
   </details>
 </aside>
@@ -20,7 +21,7 @@
       <button class="toc-modal-close">&times;</button>
     </div>
     <nav>
-      {{ .TableOfContents }}
+      {{ $toc }}
     </nav>
   </div>
 </div>

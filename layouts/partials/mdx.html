@@ -1,0 +1,6 @@
+{{- with .Params.stark_mdx -}}
+  {{- range .styles -}}
+    <link rel="stylesheet" href="{{ . | relURL }}">
+  {{- end -}}
+  <script type="module" src="{{ .script | relURL }}"></script>
+{{- end -}}

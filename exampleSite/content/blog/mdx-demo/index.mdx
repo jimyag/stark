@@ -1,0 +1,29 @@
+---
+title: "MDX interactive example"
+date: 2026-09-12T10:00:00+08:00
+lastmod: 2026-09-12T10:00:00+08:00
+description: "Markdown with a React counter, rendered before JavaScript loads."
+slug: "mdx-demo"
+tags: ["mdx"]
+images: []
+draft: false
+---
+
+import Counter from './Counter.jsx'
+
+## Interactive counter
+
+This paragraph is available in the initial HTML and the search index.
+
+<Counter />
+
+## Markdown still works
+
+| Feature | Available |
+| --- | --- |
+| Server-rendered content | Yes |
+| React state | Yes |
+
+```js
+const greeting = 'Hello from MDX'
+```

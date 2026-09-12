@@ -1,0 +1,14 @@
+{{- $toc := .TableOfContents -}}
+{{- if .Params.stark_mdx -}}
+  {{- $start := int (site.Params.mdx.tocStartLevel | default 2) -}}
+  {{- $end := int (site.Params.mdx.tocEndLevel | default 4) -}}
+  {{- $items := "" -}}
+  {{- range .Params.stark_mdx.headings -}}
+    {{- if and (ge (int .level) $start) (le (int .level) $end) -}}
+      {{- $items = printf `%s<li><a href="#%s">%s</a></li>` $items (.id | htmlEscape) (.text | htmlEscape) -}}
+    {{- end -}}
+  {{- end -}}
+  {{- $toc = "" -}}
+  {{- if $items -}}{{- $toc = printf `<nav id="TableOfContents"><ul>%s</ul></nav>` $items | safeHTML -}}{{- end -}}
+{{- end -}}
+{{- return $toc -}}

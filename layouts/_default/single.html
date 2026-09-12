@@ -1,5 +1,6 @@
 {{ define "main" }}
-{{- $hasTOC := and .TableOfContents (gt (len .TableOfContents) 100) -}}
+{{- $toc := partial "article-toc.html" . -}}
+{{- $hasTOC := and $toc (gt (len $toc) 100) -}}
 <div class="article-wrapper{{ if $hasTOC }} has-toc{{ end }}">
   <article>
     {{ if eq .Type "blog" }}{{ if not .Params.menu }}
@@ -14,8 +15,12 @@
           · {{ .WordCount }} {{ i18n "words_unit" }} · {{ i18n "approx" }} {{ .ReadingTime }} {{ i18n "min_read" }}
         </i>
       </p>
+      {{- with .Params.stark_mdx -}}
+      <a class="markdown-link" href="{{ .source | relURL }}">MDX</a>
+      {{- else -}}
       {{- with $markdownOutput -}}
       <a class="markdown-link" href="{{ .RelPermalink }}">{{ i18n "markdown" }}</a>
+      {{- end -}}
       {{- end -}}
     </div>
     {{- $displayDate := .Date -}}
@@ -29,6 +34,7 @@
     <div class="content">
       {{ .Content }}
     </div>
+    {{- partial "mdx.html" . -}}
     <p>
       {{ range (.GetTerms "tags") }}
       <a href="{{ .RelPermalink }}">#{{ .LinkTitle }}</a>

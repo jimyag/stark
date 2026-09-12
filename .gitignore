@@ -1,3 +1,9 @@
 docs/
 exampleSite/.hugo_build.lock
 exampleSite/public/
+node_modules/
+.stark-mdx/
+exampleSite/.stark-mdx/
+.stark-mdx-build-*/
+exampleSite/.stark-mdx-build-*/
+exampleSite/resources/

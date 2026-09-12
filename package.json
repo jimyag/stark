@@ -1,0 +1,32 @@
+{
+  "name": "stark",
+  "version": "1.0.0",
+  "description": "A minimal Hugo blog theme with practical enhancements. Based on [hugo-bearblog](https://github.com/janraasch/hugo-bearblog).",
+  "scripts": {
+    "mdx": "node scripts/mdx.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jimyag/stark.git"
+  },
+  "license": "MIT",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/jimyag/stark/issues"
+  },
+  "homepage": "https://github.com/jimyag/stark#readme",
+  "dependencies": {
+    "@mdx-js/mdx": "3.1.1",
+    "esbuild": "0.28.2",
+    "gray-matter": "4.0.3",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "rehype-slug": "6.0.0",
+    "remark-gfm": "4.0.1",
+    "smol-toml": "1.8.0"
+  },
+  "private": true,
+  "engines": {
+    "node": ">=22"
+  }
+}

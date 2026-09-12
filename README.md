@@ -186,6 +186,101 @@ All fields except `title` and `date` are optional.
 
 ## Features In Detail
 
+### MDX (optional)
+
+Stark supports individual `.mdx` pages with imported React components, JSX,
+expressions, and GitHub-flavored Markdown. Node.js 22+ and Hugo 0.162+ are
+required for this optional workflow. Ordinary Markdown sites still build with
+Hugo alone.
+
+The compiler renders content to HTML at build time, then bundles React hydration
+for each MDX page. The initial HTML contains the article and component output;
+search, RSS summaries, word counts, and reading time remain available without
+browser JavaScript. Only MDX pages load React.
+
+From your **site root**, install the theme's locked dependencies and copy the
+mount configuration once:
+
+```bash
+npm ci --prefix themes/stark
+cp themes/stark/exampleSite/mdx.toml mdx.toml
+```
+
+Add `.stark-mdx/` and `.stark-mdx-build-*/` to your site's `.gitignore`. If you
+already customize Hugo module mounts or content security, merge the settings in
+`mdx.toml` with your existing configuration. The mounts combine generated HTML
+pages with original content and local images; HTML content must be enabled.
+
+Create `content/blog/my-post/index.mdx` alongside its React components:
+
+```mdx
+---
+title: "My interactive post"
+date: 2026-09-12T10:00:00+08:00
+lastmod: 2026-09-12T10:00:00+08:00
+description: "A small interactive example."
+slug: "my-interactive-post"
+tags: ["mdx"]
+images: []
+draft: false
+---
+
+import Counter from './Counter.jsx'
+
+## Try it
+
+This text is rendered at build time.
+
+<Counter />
+```
+
+Use [Counter.jsx](exampleSite/content/blog/mdx-demo/Counter.jsx) as a starting
+point. YAML and TOML (`+++`) front matter are supported. Compile before every
+Hugo build, including in your deployment build command:
+
+```bash
+node themes/stark/scripts/mdx.mjs --site .
+hugo --config hugo.toml,mdx.toml
+```
+
+For local preview, use `hugo server --config hugo.toml,mdx.toml` after compiling.
+Rerun the compiler after editing MDX or its imports; the compiler does not watch
+files. Drafts and future posts are excluded, including their generated assets.
+To preview them, compile with `--drafts --future` and run Hugo with `-D -F`.
+Expired pages are always excluded. Use explicit page dates and draft fields;
+the compiler does not evaluate Hugo cascades or custom publication-date rules.
+
+Try the included example from the **theme root**:
+
+```bash
+npm ci
+npm run mdx -- --site exampleSite
+hugo server --source exampleSite --themesDir ../.. --config hugo.toml,mdx.toml
+```
+
+MDX headings appear in Stark's TOC, with levels 2–4 by default. Override
+`params.mdx.tocStartLevel` and `params.mdx.tocEndLevel` for MDX pages. The article's
+source link downloads the original MDX; it does not include imported component
+files. MDX pages emit HTML instead of the ordinary raw Markdown output.
+
+Boundaries:
+
+- Each `.mdx` file under `content/` is a page. Use `.jsx` or `.tsx` for imported
+  components. Home and section `_index.mdx` files are not supported.
+- Do not keep both `index.md` and `index.mdx` for the same page. Generated files
+  stay under `.stark-mdx/`; source content is never overwritten.
+- React components must render on the server. Access browser globals such as
+  `window` inside effects or event handlers. Install extra component dependencies
+  in your site's `package.json`.
+- MDX uses its own renderer: Hugo shortcodes, Chroma highlighting, Mermaid code
+  hooks, and automatic Hugo image processing do not run inside MDX. Relative
+  image URLs in page bundles work; Markdown pages retain their existing features.
+- MDX is executable source code. Compile articles and imports you trust.
+
+Integration references: [MDX compiler](https://mdxjs.com/packages/mdx/),
+[React hydration](https://react.dev/reference/react-dom/client/hydrateRoot), and
+[Hugo content formats](https://gohugo.io/content-management/formats/).
+
 ### Search
 
 Search is built client-side from a JSON index generated at build time. It requires no external service. Open with the Search button in the nav or `Ctrl/Cmd+K`. Results are scored by title (10×), tags (5×), and content (1×), top 10 shown.
