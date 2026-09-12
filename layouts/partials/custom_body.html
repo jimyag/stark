@@ -37,6 +37,7 @@
         const viewBox = svg?.viewBox?.baseVal;
         if (!viewBox?.width || !viewBox?.height) return;
 
+        block.classList.toggle('mermaid-compact', viewBox.width <= block.clientWidth - 48);
         svg.style.width = `${viewBox.width}px`;
         svg.style.height = `${viewBox.height}px`;
         svg.style.maxWidth = 'none';
