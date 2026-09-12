@@ -1,8 +1,6 @@
 /* ===== Notion-inspired reading refresh ===== */
 html {
-    background:
-        radial-gradient(circle at 42% 0, var(--theme-glow), transparent 34rem),
-        var(--theme);
+    background: var(--theme);
 }
 
 body {
@@ -531,12 +529,6 @@ ul.blog-posts li a:hover {
 footer {
     margin-top: 3rem;
     color: var(--secondary);
-}
-
-html[data-theme="dark"] {
-    background:
-        radial-gradient(circle at 42% 0, var(--theme-glow), transparent 34rem),
-        var(--theme);
 }
 
 html[data-theme="dark"] body > header nav {
