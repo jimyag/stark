@@ -50,6 +50,13 @@ function headingsPlugin(headings) {
   };
 }
 
+// The theme adds code-copy buttons to the article body, and React owns that
+// body. An effect runs only after hydration has committed, so it is the signal
+// that the body is safe to modify. It renders nothing, so the markup is the
+// same on both sides.
+const readySignal = "function StarkReady(){React.useEffect(function(){document.documentElement.dataset.starkMdxReady='true';document.dispatchEvent(new Event('stark:mdx-ready'))},[]);return null}";
+const contentTree = 'React.createElement(React.Fragment,null,React.createElement(Content),React.createElement(StarkReady))';
+
 async function compile(filename, staging) {
   const relative = path.relative(content, filename);
   if (path.basename(filename).startsWith('_index.')) {
@@ -106,7 +113,7 @@ async function compile(filename, staging) {
       outfile: server,
       plugins: [plugin(true)],
       stdin: {
-        contents: `import React from 'react'; import { renderToString } from 'react-dom/server'; import Content from ${JSON.stringify(filename)}; export default renderToString(React.createElement(Content));`,
+        contents: `import React from 'react'; import { renderToString } from 'react-dom/server'; import Content from ${JSON.stringify(filename)}; ${readySignal}; export default renderToString(${contentTree});`,
         resolveDir: theme,
       },
     });
@@ -123,7 +130,7 @@ async function compile(filename, staging) {
       metafile: true,
       plugins: [plugin(false)],
       stdin: {
-        contents: `import React from 'react'; import { hydrateRoot } from 'react-dom/client'; import Content from ${JSON.stringify(filename)}; hydrateRoot(document.getElementById('stark-mdx-root'), React.createElement(Content));`,
+        contents: `import React from 'react'; import { hydrateRoot } from 'react-dom/client'; import Content from ${JSON.stringify(filename)}; ${readySignal}; hydrateRoot(document.getElementById('stark-mdx-root'), ${contentTree});`,
         resolveDir: theme,
         sourcefile: 'article.jsx',
         loader: 'jsx',

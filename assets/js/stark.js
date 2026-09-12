@@ -89,7 +89,15 @@
       }, 2000);
     }
 
-    document.querySelectorAll('.highlight').forEach(block => {
+    // Chroma wraps highlighted code in .highlight. MDX pages are rendered by
+    // the MDX compiler instead, so Hugo emits plain <pre> there and the copy
+    // button has to be attached to those blocks too.
+    const blocks = [...document.querySelectorAll('.highlight')];
+    document.querySelectorAll('main .content pre').forEach(pre => {
+      if (!pre.closest('.highlight')) blocks.push(pre);
+    });
+
+    blocks.forEach(block => {
       const btn = document.createElement('button');
       btn.className = 'copy-btn';
       btn.textContent = i18n.copy || 'Copy';
@@ -110,6 +118,22 @@
       block.style.position = 'relative';
       block.appendChild(btn);
     });
+  }
+
+  // MDX pages hydrate the article body, and React drops nodes it did not
+  // render. Adding the copy buttons before hydration commits therefore both
+  // fails and triggers a hydration mismatch, so wait for the MDX compiler's
+  // ready signal instead.
+  function initCodeCopyWhenReady() {
+    if (!document.getElementById('stark-mdx-root')) {
+      initCodeCopy();
+      return;
+    }
+    if (document.documentElement.dataset.starkMdxReady === 'true') {
+      initCodeCopy();
+      return;
+    }
+    document.addEventListener('stark:mdx-ready', initCodeCopy, { once: true });
   }
 
   function initBackToTop() {
@@ -366,7 +390,7 @@
   document.addEventListener('DOMContentLoaded', function() {
     initReadingProgress();
     initThemeToggle();
-    initCodeCopy();
+    initCodeCopyWhenReady();
     initBackToTop();
     initCodeLanguageLabels();
     initImageLightbox();

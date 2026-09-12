@@ -378,7 +378,8 @@
         transition: opacity 0.2s, background 0.2s;
         z-index: 10;
     }
-    .highlight:hover .copy-btn {
+    .highlight:hover .copy-btn,
+    main .content pre:hover .copy-btn {
         opacity: 1;
     }
     .copy-btn:hover {
