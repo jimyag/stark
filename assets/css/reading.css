@@ -274,6 +274,14 @@ pre.mermaid > svg {
     margin-inline: auto;
 }
 
+/* 宽屏文章把 Mermaid 画布延伸到正文右侧留白，避免横向流程被压缩。 */
+@media (min-width: 1401px) {
+    .article-wrapper.has-toc pre.mermaid {
+        width: min(1200px, calc(50vw + 444px));
+        max-width: none;
+    }
+}
+
 :not(pre) > code {
     padding: 0.12rem 0.38rem;
     color: var(--primary);
