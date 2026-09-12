@@ -331,18 +331,33 @@ pre.mermaid.mermaid-compact {
 
 ul.blog-posts li {
     gap: 1rem;
-    padding: 0.28rem 0;
+    margin-inline: -0.55rem;
+    padding: 0.4rem 0.55rem;
     border-radius: 7px;
+}
+
+ul.blog-posts li:hover,
+ul.blog-posts li:focus-within {
+    background: var(--surface-muted);
 }
 
 ul.blog-posts li span {
     color: var(--secondary);
     font-size: 0.92rem;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
 }
 
 ul.blog-posts li a {
     font-family: var(--font-heading);
     font-size: 1.05rem;
+    text-decoration: none;
+}
+
+ul.blog-posts li a:hover {
+    text-decoration: underline;
+    text-underline-position: from-font;
+    text-decoration-thickness: from-font;
 }
 
 .year-header {
@@ -351,10 +366,55 @@ ul.blog-posts li a {
     font-family: var(--font-heading);
     color: var(--primary);
     border-bottom-color: var(--border);
+    scroll-margin-top: 1rem;
 }
 
 .pinned-section .year-header {
     color: var(--link);
+}
+
+.archive-years {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.55rem 0.85rem;
+    margin: 2.3rem 0 1.3rem;
+    padding-top: 0.8rem;
+    border-top: 1px solid var(--border);
+}
+
+.archive-years-label {
+    color: var(--secondary);
+    font-size: 0.9rem;
+}
+
+.archive-years-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.archive-years-list a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 32px;
+    padding: 0.18rem 0.58rem;
+    color: var(--secondary);
+    background: var(--surface-muted);
+    border: 1px solid transparent;
+    border-radius: 999px;
+    font-variant-numeric: tabular-nums;
+    text-decoration: none;
+}
+
+.archive-years-list a:hover,
+.archive-years-list a:focus-visible {
+    color: var(--primary);
+    background: var(--surface-subtle);
+    border-color: var(--border);
 }
 
 .toc {

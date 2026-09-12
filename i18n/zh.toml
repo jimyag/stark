@@ -40,6 +40,9 @@ other = "森林"
 [pinned]
 other = "置顶"
 
+[browse_by_year]
+other = "按年份浏览"
+
 [related_posts]
 other = "相关文章"
 

@@ -28,9 +28,20 @@
   {{/* Paginate regular posts */}}
   {{ $paginator := .Paginate $regular }}
   {{ $byYear := $paginator.Pages.GroupByDate "2006" }}
+  {{ if gt (len $byYear) 1 }}
+  <nav class="archive-years" aria-label="{{ i18n "browse_by_year" }}">
+    <span class="archive-years-label">{{ i18n "browse_by_year" }}</span>
+    <ul class="archive-years-list">
+      {{ range $byYear }}
+      <li><a href="#year-{{ .Key }}">{{ .Key }}</a></li>
+      {{ end }}
+    </ul>
+  </nav>
+  {{ end }}
+
   {{ range $byYear }}
   <div class="year-section">
-    <h3 class="year-header">{{ .Key }} <span class="year-count">({{ len .Pages }})</span></h3>
+    <h3 id="year-{{ .Key }}" class="year-header">{{ .Key }} <span class="year-count">({{ len .Pages }})</span></h3>
     <ul class="blog-posts">
       {{ range .Pages }}
       <li>

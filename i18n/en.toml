@@ -40,6 +40,9 @@ other = "Forest"
 [pinned]
 other = "Pinned"
 
+[browse_by_year]
+other = "Browse by year"
+
 [related_posts]
 other = "Related posts"
 
