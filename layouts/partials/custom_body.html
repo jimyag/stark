@@ -11,6 +11,7 @@
     function getMermaidConfig() {
         return {
             startOnLoad: false,
+            layout: 'elk',
             theme: getMermaidTheme(),
             securityLevel: 'loose',
             fontFamily: mermaidFontFamily,
@@ -19,7 +20,11 @@
             },
             flowchart: {
                 useMaxWidth: true,
-                htmlLabels: true
+                htmlLabels: true,
+                nodeSpacing: 28,
+                rankSpacing: 40,
+                padding: 10,
+                wrappingWidth: 180
             },
             er: {
                 useMaxWidth: true

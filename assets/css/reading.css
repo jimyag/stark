@@ -259,6 +259,21 @@ pre code {
     line-height: 1.62;
 }
 
+pre.mermaid {
+    width: fit-content;
+    max-width: 100%;
+    margin-inline: auto;
+    padding: clamp(1rem, 2vw, 1.5rem);
+    overflow-x: auto;
+    text-align: center;
+    white-space: normal;
+}
+
+pre.mermaid > svg {
+    display: block;
+    margin-inline: auto;
+}
+
 :not(pre) > code {
     padding: 0.12rem 0.38rem;
     color: var(--primary);
