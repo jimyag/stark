@@ -59,9 +59,6 @@ const contentTree = 'React.createElement(React.Fragment,null,React.createElement
 
 async function compile(filename, staging) {
   const relative = path.relative(content, filename);
-  if (path.basename(filename).startsWith('_index.')) {
-    throw new Error(`${relative}: MDX is supported for individual pages, not section or home pages.`);
-  }
   const target = relative.replace(/\.mdx$/, '.html');
   for (const extension of ['md', 'markdown', 'html', 'htm']) {
     const existing = relative.replace(/\.mdx$/, `.${extension}`);
@@ -141,7 +138,7 @@ async function compile(filename, staging) {
     const metadata = {
       ...parsed.data,
       markup: 'html',
-      outputs: ['HTML'],
+      ...(path.basename(filename).startsWith('_index.') ? {} : { outputs: ['HTML'] }),
       stark_mdx: {
         script: publicPath(assetPaths.find(file => file.endsWith('.js'))),
         styles: assetPaths.filter(file => file.endsWith('.css')).map(publicPath),

@@ -144,7 +144,7 @@ content/
 
 ### Home Page
 
-`content/_index.md` is rendered as the body of the home page. Use it for a bio, project table, or any Markdown content:
+`content/_index.md` or `content/_index.mdx` is rendered as the body of the home page. Use it for a bio, project table, or any Markdown content. The MDX variant can also import React components:
 
 ```markdown
 +++
@@ -188,7 +188,7 @@ All fields except `title` and `date` are optional.
 
 ### MDX (optional)
 
-Stark supports individual `.mdx` pages with imported React components, JSX,
+Stark supports `.mdx` pages, including the home page and section pages, with imported React components, JSX,
 expressions, and GitHub-flavored Markdown. Node.js 22+ and Hugo 0.162+ are
 required for this optional workflow. Ordinary Markdown sites still build with
 Hugo alone.
@@ -266,7 +266,8 @@ files. MDX pages emit HTML instead of the ordinary raw Markdown output.
 Boundaries:
 
 - Each `.mdx` file under `content/` is a page. Use `.jsx` or `.tsx` for imported
-  components. Home and section `_index.mdx` files are not supported.
+  components. Home and section `_index.mdx` files are supported and hydrate
+  through their corresponding list or home layout.
 - Do not keep both `index.md` and `index.mdx` for the same page. Generated files
   stay under `.stark-mdx/`; source content is never overwritten.
 - React components must render on the server. Access browser globals such as

@@ -59,12 +59,17 @@ test('Hugo publishes SSR, TOC, RSS and search under a base path without publishi
   const site = await mkdtemp(path.join(tmpdir(), 'stark-mdx-hugo-'));
   try {
     await cp(path.join(theme, 'exampleSite/content'), path.join(site, 'content'), { recursive: true });
+    await rm(path.join(site, 'content/_index.md'));
+    await writeFile(path.join(site, 'content/_index.mdx'), `+++\ntitle = "Home"\n+++\n\nimport Counter from './blog/mdx-demo/Counter.jsx'\n\n# Home\n\n<Counter />\n`);
     for (const config of ['hugo.toml', 'mdx.toml']) {
       await cp(path.join(theme, 'exampleSite', config), path.join(site, config));
     }
     execFileSync(process.execPath, [script, '--site', site]);
     execFileSync('hugo', ['--source', site, '--themesDir', path.dirname(theme), '--config', 'hugo.toml,mdx.toml', '--baseURL', 'https://example.com/nested/']);
     const publicDir = path.join(site, 'public');
+    const home = await readFile(path.join(publicDir, 'index.html'), 'utf8');
+    assert.match(home, /<button>Count: <!-- -->0<\/button>/);
+    assert.match(home, /src="\/nested\/stark-mdx\//);
     const html = await readFile(path.join(publicDir, 'posts/mdx-demo/index.html'), 'utf8');
     assert.match(html, /<button>Count: <!-- -->0<\/button>/);
     assert.match(html, /href="#interactive-counter"/);
