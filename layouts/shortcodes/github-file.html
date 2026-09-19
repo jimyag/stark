@@ -1,0 +1,6 @@
+{{- $url := .Get "url" | default (.Get 0) -}}
+{{- $start := .Get "start" -}}
+{{- $end := .Get "end" -}}
+<div class="github-file" data-github-file data-github-url="{{ $url }}" data-github-start="{{ $start }}" data-github-end="{{ $end }}">
+  <div class="github-file-loading" role="status">{{ i18n "github_loading" }}</div>
+</div>

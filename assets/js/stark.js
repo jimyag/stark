@@ -1,6 +1,8 @@
 (function() {
   const i18n = window.StarkI18n || {};
   const config = window.StarkConfig || {};
+  const githubFileMaxBytes = 5 * 1024 * 1024;
+  const githubFileTimeout = 15000;
 
   function initReadingProgress() {
     const bar = document.createElement('div');
@@ -84,45 +86,287 @@
     });
   }
 
-  function initCodeCopy() {
-    async function writeText(text) {
-      if (navigator.clipboard && window.isSecureContext) {
-        await navigator.clipboard.writeText(text);
-        return;
+  async function writeText(text) {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(text);
+      return;
+    }
+
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.setAttribute('readonly', '');
+    textarea.style.position = 'fixed';
+    textarea.style.top = '-9999px';
+    document.body.appendChild(textarea);
+    textarea.select();
+
+    try {
+      if (!document.execCommand('copy')) {
+        throw new Error('copy failed');
       }
+    } finally {
+      document.body.removeChild(textarea);
+    }
+  }
 
-      const textarea = document.createElement('textarea');
-      textarea.value = text;
-      textarea.setAttribute('readonly', '');
-      textarea.style.position = 'fixed';
-      textarea.style.top = '-9999px';
-      document.body.appendChild(textarea);
-      textarea.select();
+  function showCopyState(btn, ok, defaultText) {
+    btn.textContent = ok ? i18n.copied : i18n.copyFailed;
+    btn.classList.toggle('copied', ok);
+    setTimeout(() => {
+      btn.textContent = defaultText;
+      btn.classList.remove('copied');
+    }, 2000);
+  }
 
+  function parseLineNumber(value, name) {
+    if (value === undefined || value === null || value === '') return null;
+    const number = Number(value);
+    if (!Number.isInteger(number) || number < 1) {
+      throw new Error(`${name} must be a positive integer`);
+    }
+    return number;
+  }
+
+  function parseGitHubFileURL(value, startValue, endValue) {
+    if (!value) throw new Error('GitHub file URL is missing');
+
+    let url;
+    try {
+      url = new URL(value);
+    } catch {
+      throw new Error('GitHub file URL is invalid');
+    }
+
+    const hostname = url.hostname.toLowerCase();
+    if (url.protocol !== 'https:' || !['github.com', 'www.github.com'].includes(hostname)) {
+      throw new Error('only https://github.com/... file URLs are supported');
+    }
+
+    let parts;
+    try {
+      parts = url.pathname.split('/').filter(Boolean).map(decodeURIComponent);
+    } catch {
+      throw new Error('GitHub file URL contains invalid escaping');
+    }
+
+    if (parts.length < 5 || parts[2] !== 'blob') {
+      throw new Error('GitHub file URL must use /<owner>/<repo>/blob/<ref>/<path>');
+    }
+
+    const [owner, repo, , ref, ...fileParts] = parts;
+    const filePath = fileParts.join('/');
+    if (!owner || !repo || !ref || !filePath || ref.includes('/')) {
+      throw new Error('GitHub file URL must contain a single-segment ref and a file path');
+    }
+    if (fileParts.some(part => part === '.' || part === '..')) {
+      throw new Error('GitHub file path cannot contain . or .. segments');
+    }
+
+    let hashStart = null;
+    let hashEnd = null;
+    const lineRange = url.hash.match(/^#L(\d+)(?:-L?(\d+))?$/i);
+    if (url.hash && !lineRange) {
+      throw new Error('GitHub file URL line anchors must use #L10 or #L10-L20');
+    }
+    if (lineRange) {
+      hashStart = parseLineNumber(lineRange[1], 'line start');
+      hashEnd = parseLineNumber(lineRange[2] || lineRange[1], 'line end');
+    }
+
+    const start = parseLineNumber(startValue, 'start') ?? hashStart;
+    const end = parseLineNumber(endValue, 'end') ?? hashEnd;
+    if (start !== null && end !== null && start > end) {
+      throw new Error('start must not be greater than end');
+    }
+
+    const encodedPath = fileParts.map(encodeURIComponent).join('/');
+    const rawURL = `https://raw.githubusercontent.com/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/${encodeURIComponent(ref)}/${encodedPath}`;
+
+    return { url: url.href, owner, repo, ref, filePath, rawURL, start, end };
+  }
+
+  function languageFromPath(filePath) {
+    const filename = filePath.split('/').pop() || '';
+    const extension = filename.includes('.') ? filename.split('.').pop().toLowerCase() : '';
+    const languages = {
+      bash: 'shell',
+      css: 'css',
+      go: 'go',
+      h: 'c',
+      hpp: 'cpp',
+      html: 'html',
+      java: 'java',
+      js: 'javascript',
+      json: 'json',
+      jsx: 'jsx',
+      md: 'markdown',
+      mdx: 'mdx',
+      py: 'python',
+      rs: 'rust',
+      sh: 'shell',
+      sql: 'sql',
+      toml: 'toml',
+      ts: 'typescript',
+      tsx: 'tsx',
+      xml: 'xml',
+      yaml: 'yaml',
+      yml: 'yaml',
+    };
+    return languages[extension] || extension || 'text';
+  }
+
+  function githubFileElement(tag, className, text) {
+    const element = document.createElement(tag);
+    if (className) element.className = className;
+    if (text !== undefined) element.textContent = text;
+    return element;
+  }
+
+  function renderGitHubFileError(block, url, error) {
+    block.replaceChildren();
+    block.dataset.githubFileState = 'error';
+    const message = githubFileElement('p', 'github-file-error-message', `${i18n.githubError || 'GitHub file loading failed: '}${error.message}`);
+    const link = githubFileElement('a', null, i18n.githubOpenRaw || 'Open source link');
+    link.href = url || '#';
+    link.target = '_blank';
+    link.rel = 'noreferrer noopener';
+
+    const errorBox = githubFileElement('div', 'github-file-error');
+    errorBox.setAttribute('role', 'alert');
+    errorBox.append(message, link);
+    block.appendChild(errorBox);
+  }
+
+  function renderGitHubFile(block, source, content) {
+    const normalized = content.replace(/\r\n?/g, '\n');
+    const hasTrailingNewline = normalized.endsWith('\n');
+    const allLines = normalized.split('\n');
+    if (hasTrailingNewline) allLines.pop();
+    if (allLines.length === 0) allLines.push('');
+
+    const start = source.start ?? 1;
+    const end = source.end ?? allLines.length;
+    if (start > allLines.length || end > allLines.length) {
+      throw new Error(`line range ${start}-${end} exceeds the file's ${allLines.length} lines`);
+    }
+
+    const filename = source.filePath.split('/').pop() || source.filePath;
+    const header = githubFileElement('div', 'github-file-header');
+    const title = githubFileElement('div', 'github-file-title');
+    title.append(
+      githubFileElement('span', 'github-file-brand', 'GitHub'),
+      githubFileElement('code', 'github-file-path', `${source.owner}/${source.repo}/${source.filePath}`),
+    );
+
+    const actions = githubFileElement('div', 'github-file-actions');
+    const metadata = githubFileElement('span', 'github-file-meta', `${filename} · ${source.ref.slice(0, 12)} · ${start}-${end}/${allLines.length}`);
+    const sourceLink = githubFileElement('a', 'github-file-link', i18n.githubOpen || 'Open on GitHub');
+    sourceLink.href = source.url;
+    sourceLink.target = '_blank';
+    sourceLink.rel = 'noreferrer noopener';
+    const toggleButton = githubFileElement('button', 'github-file-toggle', i18n.githubCollapse || 'Collapse');
+    toggleButton.type = 'button';
+    toggleButton.setAttribute('aria-expanded', 'true');
+    toggleButton.addEventListener('click', () => {
+      const collapsed = block.classList.toggle('github-file-collapsed');
+      toggleButton.textContent = collapsed
+        ? (i18n.githubExpand || 'Expand')
+        : (i18n.githubCollapse || 'Collapse');
+      toggleButton.setAttribute('aria-expanded', String(!collapsed));
+    });
+    const copyButton = githubFileElement('button', 'copy-btn github-file-copy', i18n.copy || 'Copy');
+    copyButton.type = 'button';
+    copyButton.setAttribute('aria-label', i18n.copyCode || i18n.copy || 'Copy code');
+    copyButton.addEventListener('click', async () => {
       try {
-        if (!document.execCommand('copy')) {
-          throw new Error('copy failed');
-        }
-      } finally {
-        document.body.removeChild(textarea);
+        await writeText(normalized);
+        showCopyState(copyButton, true, i18n.copy || 'Copy');
+      } catch {
+        showCopyState(copyButton, false, i18n.copy || 'Copy');
       }
-    }
+    });
+    actions.append(metadata, sourceLink, toggleButton, copyButton);
+    header.append(title, actions);
 
-    function showCopyState(btn, ok, defaultText) {
-      btn.textContent = ok ? i18n.copied : i18n.copyFailed;
-      btn.classList.toggle('copied', ok);
-      setTimeout(() => {
-        btn.textContent = defaultText;
-        btn.classList.remove('copied');
-      }, 2000);
+    const scroll = githubFileElement('div', 'github-file-scroll');
+    scroll.tabIndex = 0;
+    const pre = githubFileElement('pre', 'github-file-code');
+    const code = githubFileElement('code');
+    code.dataset.lang = languageFromPath(source.filePath);
+    for (let lineNumber = start; lineNumber <= end; lineNumber++) {
+      const line = githubFileElement('span', 'github-file-line', allLines[lineNumber - 1]);
+      line.dataset.lineNumber = String(lineNumber);
+      code.appendChild(line);
     }
+    pre.appendChild(code);
+    scroll.appendChild(pre);
 
+    block.replaceChildren(header, scroll);
+    block.dataset.githubFileState = 'loaded';
+  }
+
+  async function loadGitHubFile(block) {
+    if (block.dataset.githubFileState) return;
+    block.dataset.githubFileState = 'loading';
+
+    let source;
+    try {
+      source = parseGitHubFileURL(block.dataset.githubUrl, block.dataset.githubStart, block.dataset.githubEnd);
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), githubFileTimeout);
+      let response;
+      try {
+        response = await fetch(source.rawURL, {
+          headers: { Accept: 'text/plain' },
+          signal: controller.signal,
+        });
+      } catch (error) {
+        if (error.name === 'AbortError') throw new Error(`request timed out after ${githubFileTimeout / 1000}s`);
+        throw new Error(`request failed: ${error.message}`);
+      } finally {
+        clearTimeout(timeout);
+      }
+      if (!response.ok) throw new Error(`GitHub returned HTTP ${response.status}`);
+
+      const contentLength = Number(response.headers.get('content-length'));
+      if (contentLength > githubFileMaxBytes) {
+        throw new Error(`file is larger than ${githubFileMaxBytes / 1024 / 1024} MiB`);
+      }
+      const content = await response.text();
+      if (new Blob([content]).size > githubFileMaxBytes) {
+        throw new Error(`file is larger than ${githubFileMaxBytes / 1024 / 1024} MiB`);
+      }
+      renderGitHubFile(block, source, content);
+    } catch (error) {
+      const normalizedError = error instanceof Error ? error : new Error(String(error));
+      renderGitHubFileError(block, source?.url, normalizedError);
+      console.error('GitHub file loading failed', { url: block.dataset.githubUrl, error: normalizedError });
+    }
+  }
+
+  function initGitHubFiles() {
+    document.querySelectorAll('[data-github-file]').forEach(loadGitHubFile);
+  }
+
+  function initGitHubFilesWhenReady() {
+    if (!document.getElementById('stark-mdx-root')) {
+      initGitHubFiles();
+      return;
+    }
+    if (document.documentElement.dataset.starkMdxReady === 'true') {
+      initGitHubFiles();
+      return;
+    }
+    document.addEventListener('stark:mdx-ready', initGitHubFiles, { once: true });
+  }
+
+  function initCodeCopy() {
     // Chroma wraps highlighted code in .highlight. MDX pages are rendered by
     // the MDX compiler instead, so Hugo emits plain <pre> there and the copy
     // button has to be attached to those blocks too.
     const blocks = [...document.querySelectorAll('.highlight')];
     document.querySelectorAll('main .content pre').forEach(pre => {
-      if (!pre.closest('.highlight') && !pre.classList.contains('mermaid')) blocks.push(pre);
+      if (!pre.closest('.highlight') && !pre.classList.contains('mermaid') && !pre.closest('.github-file')) blocks.push(pre);
     });
 
     blocks.forEach(block => {
@@ -473,6 +717,7 @@
     initThemeToggle();
     initPalettePicker();
     initCodeCopyWhenReady();
+    initGitHubFilesWhenReady();
     initBackToTop();
     initCodeLanguageLabels();
     initImageLightbox();

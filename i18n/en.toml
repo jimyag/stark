@@ -58,6 +58,24 @@ other = "Copied!"
 [copy_failed]
 other = "Failed"
 
+[github_open]
+other = "Open on GitHub"
+
+[github_open_raw]
+other = "Open source link"
+
+[github_loading]
+other = "Loading GitHub file…"
+
+[github_error]
+other = "GitHub file loading failed: "
+
+[github_collapse]
+other = "Collapse"
+
+[github_expand]
+other = "Expand"
+
 [markdown]
 other = "Markdown"
 

@@ -413,6 +413,40 @@ Critical warning.
 
 Available types: `note` (default), `tip`, `warning`, `danger`.
 
+### GitHub File Shortcode
+
+Public GitHub files can be requested in the browser and displayed with line
+numbers. Use a commit, tag, or branch without a slash in the `blob` URL:
+
+```markdown
+{{</* github-file url="https://github.com/kubernetes/kubernetes/blob/52ba90138eb40cab0987dac73e05c838149bdd1c/staging/src/k8s.io/api/core/v1/types.go#L8287-L8326" */>}}
+```
+
+Without a line anchor, the whole file is displayed. The code area scrolls both
+vertically and horizontally, and can be collapsed. `start` and `end` can also
+be passed when the line range is easier to read separately:
+
+```markdown
+{{</* github-file
+  url="https://github.com/example/project/blob/main/example.go"
+  start="10"
+  end="30"
+*/>}}
+```
+
+For MDX pages, import the shared component from `content/GitHubFile.jsx`:
+
+```mdx
+import GitHubFile from '../../GitHubFile.jsx'
+
+<GitHubFile url="https://github.com/example/project/blob/main/example.go" />
+```
+
+The URL must point to a public `github.com/<owner>/<repo>/blob/<ref>/<path>`
+file. The browser requests the corresponding `raw.githubusercontent.com` URL.
+Invalid URLs, missing files, request failures, and files larger than 5 MiB are
+shown as errors in the article.
+
 ### Details Shortcode
 
 ```markdown
