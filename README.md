@@ -434,6 +434,9 @@ be passed when the line range is easier to read separately:
 */>}}
 ```
 
+Syntax highlighting is loaded asynchronously after the file is shown. If the
+highlighter is unavailable, the component keeps the readable plain-text view.
+
 For MDX pages, import the shared component from `content/GitHubFile.jsx`:
 
 ```mdx

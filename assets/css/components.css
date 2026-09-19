@@ -505,6 +505,12 @@
         min-height: 1.55em;
         padding-inline-end: 1rem;
     }
+    .github-file-line > span {
+        color: var(--shiki-light);
+    }
+    html[data-theme="dark"] .github-file-line > span {
+        color: var(--shiki-dark);
+    }
     .github-file-line::before {
         display: inline-block;
         width: 5ch;

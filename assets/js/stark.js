@@ -3,6 +3,8 @@
   const config = window.StarkConfig || {};
   const githubFileMaxBytes = 5 * 1024 * 1024;
   const githubFileTimeout = 15000;
+  const githubFileHighlighterURL = 'https://esm.sh/shiki@4.4.3';
+  let githubFileHighlighterPromise;
 
   function initReadingProgress() {
     const bar = document.createElement('div');
@@ -189,12 +191,14 @@
     const filename = filePath.split('/').pop() || '';
     const extension = filename.includes('.') ? filename.split('.').pop().toLowerCase() : '';
     const languages = {
-      bash: 'shell',
+      bash: 'shellscript',
       css: 'css',
+      dockerfile: 'dockerfile',
       go: 'go',
       h: 'c',
       hpp: 'cpp',
       html: 'html',
+      ini: 'ini',
       java: 'java',
       js: 'javascript',
       json: 'json',
@@ -203,7 +207,7 @@
       mdx: 'mdx',
       py: 'python',
       rs: 'rust',
-      sh: 'shell',
+      sh: 'shellscript',
       sql: 'sql',
       toml: 'toml',
       ts: 'typescript',
@@ -212,7 +216,33 @@
       yaml: 'yaml',
       yml: 'yaml',
     };
-    return languages[extension] || extension || 'text';
+    if (filename.toLowerCase() === 'dockerfile') return 'dockerfile';
+    return languages[extension] || 'text';
+  }
+
+  function loadGitHubFileHighlighter() {
+    if (!githubFileHighlighterPromise) {
+      githubFileHighlighterPromise = import(githubFileHighlighterURL)
+        .then(module => {
+          if (typeof module.codeToHtml !== 'function') {
+            throw new Error('syntax highlighter is unavailable');
+          }
+          return module.codeToHtml;
+        })
+        .catch(error => {
+          githubFileHighlighterPromise = null;
+          throw error;
+        });
+    }
+    return githubFileHighlighterPromise;
+  }
+
+  function runWhenIdle(callback) {
+    if (typeof window.requestIdleCallback === 'function') {
+      window.requestIdleCallback(callback, { timeout: 2000 });
+      return;
+    }
+    window.setTimeout(callback, 0);
   }
 
   function githubFileElement(tag, className, text) {
@@ -293,16 +323,65 @@
     const pre = githubFileElement('pre', 'github-file-code');
     const code = githubFileElement('code');
     code.dataset.lang = languageFromPath(source.filePath);
+    const displayedLines = [];
     for (let lineNumber = start; lineNumber <= end; lineNumber++) {
-      const line = githubFileElement('span', 'github-file-line', allLines[lineNumber - 1]);
+      const lineContent = allLines[lineNumber - 1];
+      const line = githubFileElement('span', 'github-file-line', lineContent);
       line.dataset.lineNumber = String(lineNumber);
       code.appendChild(line);
+      displayedLines.push(lineContent);
     }
     pre.appendChild(code);
     scroll.appendChild(pre);
 
     block.replaceChildren(header, scroll);
     block.dataset.githubFileState = 'loaded';
+    return displayedLines.join('\n');
+  }
+
+  async function highlightGitHubFile(block, source, content) {
+    block.dataset.githubFileHighlight = 'loading';
+    try {
+      const codeToHtml = await loadGitHubFileHighlighter();
+      const html = await codeToHtml(content, {
+        defaultColor: false,
+        lang: languageFromPath(source.filePath),
+        themes: {
+          dark: 'github-dark',
+          light: 'github-light',
+        },
+      });
+      const template = document.createElement('template');
+      template.innerHTML = html;
+      const highlightedCode = template.content.querySelector('code');
+      const highlightedLines = highlightedCode
+        ? [...highlightedCode.children].filter(line => line.classList.contains('line'))
+        : [];
+      const lines = [...block.querySelectorAll('.github-file-line')];
+      if (highlightedLines.length !== lines.length) {
+        throw new Error('syntax highlighter returned an unexpected number of lines');
+      }
+
+      lines.forEach((line, index) => {
+        line.replaceChildren(...[...highlightedLines[index].childNodes].map(node => node.cloneNode(true)));
+        line.dataset.highlighted = 'true';
+      });
+      block.dataset.githubFileHighlight = 'loaded';
+    } catch (error) {
+      block.dataset.githubFileHighlight = 'fallback';
+      console.warn('GitHub file syntax highlighting failed; showing plain text', {
+        url: block.dataset.githubUrl,
+        error,
+      });
+    }
+  }
+
+  function scheduleGitHubFileHighlight(block, source, content) {
+    runWhenIdle(() => {
+      if (block.dataset.githubFileState === 'loaded') {
+        highlightGitHubFile(block, source, content);
+      }
+    });
   }
 
   async function loadGitHubFile(block) {
@@ -336,7 +415,8 @@
       if (new Blob([content]).size > githubFileMaxBytes) {
         throw new Error(`file is larger than ${githubFileMaxBytes / 1024 / 1024} MiB`);
       }
-      renderGitHubFile(block, source, content);
+      const displayedContent = renderGitHubFile(block, source, content);
+      scheduleGitHubFileHighlight(block, source, displayedContent);
     } catch (error) {
       const normalizedError = error instanceof Error ? error : new Error(String(error));
       renderGitHubFileError(block, source?.url, normalizedError);
