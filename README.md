@@ -2,6 +2,8 @@
 
 A minimal Hugo blog theme with practical enhancements. Based on [hugo-bearblog](https://github.com/janraasch/hugo-bearblog).
 
+[![Check](https://github.com/jimyag/stark/actions/workflows/check.yaml/badge.svg)](https://github.com/jimyag/stark/actions/workflows/check.yaml)
+
 Live demo: [jimyag.com](https://jimyag.com)
 
 ## Features
@@ -497,6 +499,15 @@ defaultContentLanguage = "en"
 ```
 
 To add another language, create `i18n/<code>.toml` in your site (not the theme) and translate the keys from `i18n/zh.toml`.
+
+## Development
+
+With Node.js 22 and Hugo 0.165 installed, run the MDX and Hugo smoke tests:
+
+```bash
+npm ci
+node --test tests/*.test.mjs
+```
 
 ## Credits
 

@@ -23,6 +23,11 @@ window.StarkI18n = {
   imageClose:        {{ printf "%s" (i18n "image_close")        | jsonify | safeJS }},
   imageClickZoom:    {{ printf "%s" (i18n "image_click_zoom")   | jsonify | safeJS }},
   imagePreview:      {{ printf "%s" (i18n "image_preview")     | jsonify | safeJS }},
+  mediaZoomIn:       {{ printf "%s" (i18n "media_zoom_in")     | jsonify | safeJS }},
+  mediaZoomOut:      {{ printf "%s" (i18n "media_zoom_out")    | jsonify | safeJS }},
+  mediaReset:        {{ printf "%s" (i18n "media_reset")       | jsonify | safeJS }},
+  mediaClose:        {{ printf "%s" (i18n "media_close")       | jsonify | safeJS }},
+  mediaPreview:      {{ printf "%s" (i18n "media_preview")     | jsonify | safeJS }},
   themeDark:         {{ printf "%s" (i18n "theme_dark")         | jsonify | safeJS }},
   themeLight:        {{ printf "%s" (i18n "theme_light")        | jsonify | safeJS }},
 };
@@ -32,5 +37,6 @@ window.StarkConfig = {
   {{- else }}
   searchIndexURL: {{ "index.json" | relURL | jsonify | safeJS }},
   {{- end }}
+  shikiURL: {{ "js/vendor/shiki.js" | relURL | jsonify | safeJS }},
 };
 </script>

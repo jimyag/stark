@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "A minimal Hugo blog theme with practical enhancements. Based on [hugo-bearblog](https://github.com/janraasch/hugo-bearblog).",
   "scripts": {
-    "mdx": "node scripts/mdx.mjs"
+    "mdx": "node scripts/mdx.mjs",
+    "build:shiki": "node scripts/build-shiki.mjs"
   },
   "repository": {
     "type": "git",
@@ -17,6 +18,10 @@
   "homepage": "https://github.com/jimyag/stark#readme",
   "dependencies": {
     "@mdx-js/mdx": "3.1.1",
+    "@shikijs/core": "4.4.3",
+    "@shikijs/engine-javascript": "4.4.3",
+    "@shikijs/langs": "4.4.3",
+    "@shikijs/themes": "4.4.3",
     "esbuild": "0.28.2",
     "gray-matter": "4.0.3",
     "react": "19.3.0",
