@@ -147,3 +147,21 @@ other = "Dark mode"
 
 [theme_light]
 other = "Light mode"
+
+[media_zoom_in]
+other = "Zoom in"
+
+[media_zoom_out]
+other = "Zoom out"
+
+[media_reset]
+other = "Reset view"
+
+[media_close]
+other = "Close preview"
+
+[media_click_zoom]
+other = "Open preview"
+
+[media_preview]
+other = "Media preview"

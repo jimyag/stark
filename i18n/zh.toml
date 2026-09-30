@@ -147,3 +147,21 @@ other = "深色模式"
 
 [theme_light]
 other = "浅色模式"
+
+[media_zoom_in]
+other = "放大"
+
+[media_zoom_out]
+other = "缩小"
+
+[media_reset]
+other = "重置视图"
+
+[media_close]
+other = "关闭预览"
+
+[media_click_zoom]
+other = "打开预览"
+
+[media_preview]
+other = "媒体预览"

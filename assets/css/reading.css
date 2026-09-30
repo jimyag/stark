@@ -441,8 +441,7 @@ ul.blog-posts li a:hover {
     text-decoration: none;
 }
 
-.toc-toggle,
-#back-to-top {
+.toc-toggle {
     color: var(--primary);
     background: var(--entry);
     border: 1px solid var(--border);
@@ -450,8 +449,7 @@ ul.blog-posts li a:hover {
     box-shadow: var(--notion-shadow);
 }
 
-.toc-toggle:hover,
-#back-to-top:hover {
+.toc-toggle:hover {
     color: var(--primary);
     background: var(--surface-muted);
 }
