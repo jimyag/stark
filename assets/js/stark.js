@@ -66,34 +66,6 @@
     }
   }
 
-  function initPalettePicker() {
-    const root = document.documentElement;
-    const picker = document.querySelector('.palette-picker');
-    const options = [...document.querySelectorAll('.palette-options [data-palette]')];
-    const palettes = new Set(['paper', 'ocean', 'forest']);
-    if (!picker || !options.length) return;
-
-    function applyPalette(palette, persist) {
-      if (!palettes.has(palette)) palette = 'paper';
-      root.setAttribute('data-palette', palette);
-      options.forEach(option => {
-        option.setAttribute('aria-pressed', option.dataset.palette === palette ? 'true' : 'false');
-      });
-      if (persist) {
-        localStorage.setItem('stark-palette', palette);
-        document.dispatchEvent(new CustomEvent('stark:palette-change', { detail: { palette } }));
-      }
-    }
-
-    applyPalette(root.getAttribute('data-palette') || 'paper', false);
-    options.forEach(option => {
-      option.addEventListener('click', () => {
-        applyPalette(option.dataset.palette, true);
-        picker.open = false;
-      });
-    });
-  }
-
   async function writeText(text) {
     if (navigator.clipboard && window.isSecureContext) {
       await navigator.clipboard.writeText(text);
@@ -873,7 +845,6 @@
   document.addEventListener('DOMContentLoaded', function() {
     initReadingProgress();
     initThemeToggle();
-    initPalettePicker();
     initCodeCopyWhenReady();
     initGitHubFilesWhenReady();
     initBackToTop();

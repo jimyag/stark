@@ -25,23 +25,14 @@ other = "显示目录"
 [toc_close]
 other = "关闭目录"
 
-[palette]
-other = "配色"
-
-[palette_paper]
-other = "纸张"
-
-[palette_ocean]
-other = "海洋"
-
-[palette_forest]
-other = "森林"
-
 [pinned]
 other = "置顶"
 
 [browse_by_year]
 other = "按年份浏览"
+
+[main_navigation]
+other = "主导航"
 
 [related_posts]
 other = "相关文章"

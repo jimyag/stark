@@ -4,13 +4,13 @@
     -moz-osx-font-smoothing: grayscale;
     --font-mono: "0xProto", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
     --font-body: "0xProto", "LXGW WenKai", "霞鹜文楷", "STKaiti", "Kaiti SC", ui-monospace, ui-serif, Georgia, serif;
-    --font-heading: var(--font-body);
-    --theme: #fbfaf7;
-    --entry: #fffefd;
-    --primary: #2f2b26;
-    --secondary: #736d64;
+    --font-heading: "Noto Serif SC", "Source Han Serif SC", "Songti SC", "STSong", ui-serif, Georgia, serif;
+    --theme: #f8f8f5;
+    --entry: #ffffff;
+    --primary: #292724;
+    --secondary: #6f6a63;
     --tertiary: #e8e1d8;
-    --content: #3f3a34;
+    --content: #403d38;
     --code-bg: #f8f9fc;
     --code-inline-bg: #f1f2f7;
     --code-text: #4c4f69;
@@ -25,11 +25,11 @@
     --code-constant: #209fb5;
     --code-comment: #6c6f85;
     --code-error: #d20f39;
-    --border: #e5ded4;
-    --surface-muted: #f7f3ee;
+    --border: #e7e4dd;
+    --surface-muted: #f2f1ec;
     --surface-subtle: #efe8df;
-    --link: #8f5f2f;
-    --link-hover: #6f451f;
+    --link: #8a5a32;
+    --link-hover: #6f4526;
     --link-visited: #745c8f;
     --focus: #a66a2c;
     --on-primary: #fffefd;
@@ -45,12 +45,12 @@
 
   html[data-theme="dark"] {
     color-scheme: dark;
-    --theme: #171614;
-    --entry: #22211f;
-    --primary: #f3f0ea;
+    --theme: #171715;
+    --entry: #22221f;
+    --primary: #f2f0eb;
     --secondary: #aaa49b;
     --tertiary: #4a443c;
-    --content: #d9d3ca;
+    --content: #d8d4cd;
     --code-bg: #11111b;
     --code-inline-bg: #1e1e2e;
     --code-text: #cdd6f4;
@@ -68,7 +68,7 @@
     --border: #3b3832;
     --surface-muted: #262421;
     --surface-subtle: #302c27;
-    --link: #d7aa74;
+    --link: #d9ad78;
     --link-hover: #f0c48d;
     --link-visited: #c7abd9;
     --focus: #d7aa74;

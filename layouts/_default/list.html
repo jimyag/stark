@@ -1,5 +1,7 @@
 {{ define "main" }}
 <div class="content">
+  <h1 class="archive-title">{{ .Title }}</h1>
+  {{ with .Content }}<div class="archive-intro">{{ . }}</div>{{ end }}
   {{ if .Data.Singular }}
   <h3 class="filter-title">{{ i18n "filtering_for" }} "{{ .Title }}"</h3>
   <small>

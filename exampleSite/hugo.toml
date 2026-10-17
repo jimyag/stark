@@ -40,6 +40,7 @@ tags = "/blog/:slug"
   weight = 2
 
 [params]
+palette = "paper"
 description = "A minimal blog about software engineering"
 favicon    = "images/favicon.png"
 images     = ["images/share.png"]  # default OG share image

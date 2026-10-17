@@ -33,7 +33,9 @@ Live demo: [jimyag.com](https://jimyag.com)
 
 Stark bundles the 0xProto webfont for Latin text, code, and UI details. The font
 files live in `static/fonts/` and are licensed under the SIL Open Font License;
-see `static/fonts/0xProto-LICENSE.txt`.
+see `static/fonts/0xProto-LICENSE.txt`. Headings prefer local `Noto Serif SC`,
+`Source Han Serif SC`, and `Songti SC` fonts before falling back to a system
+serif.
 
 Chinese text prefers the local `LXGW WenKai` / `霞鹜文楷` font when it is
 installed on the reader's system. The full LXGW WenKai font is not bundled
@@ -98,6 +100,7 @@ tags = "/blog/:slug"
   weight = 2
 
 [params]
+palette          = "paper"                # paper, ocean, or forest
 description      = "A minimal blog about software engineering"
 favicon          = "images/favicon.png"   # path under /static
 images           = ["images/share.png"]   # default OG share image
