@@ -5,14 +5,14 @@
     --font-mono: "0xProto", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
     --font-body: "0xProto", "LXGW WenKai", "霞鹜文楷", "STKaiti", "Kaiti SC", ui-monospace, ui-serif, Georgia, serif;
     --font-heading: "Noto Serif SC", "Source Han Serif SC", "Songti SC", "STSong", ui-serif, Georgia, serif;
-    --theme: #f8f8f5;
+    --theme: #f7f4ed;
     --entry: #ffffff;
     --primary: #292724;
     --secondary: #6f6a63;
     --tertiary: #e8e1d8;
     --content: #403d38;
-    --code-bg: #f8f9fc;
-    --code-inline-bg: #f1f2f7;
+    --code-bg: #f7f4ed;
+    --code-inline-bg: #e4dfd7;
     --code-text: #4c4f69;
     --code-muted: #7c7f93;
     --code-border: #ccd0da;
@@ -26,8 +26,8 @@
     --code-comment: #6c6f85;
     --code-error: #d20f39;
     --border: #e7e4dd;
-    --surface-muted: #f2f1ec;
-    --surface-subtle: #efe8df;
+    --surface-muted: #efede6;
+    --surface-subtle: #e4dfd7;
     --link: #8a5a32;
     --link-hover: #6f4526;
     --link-visited: #745c8f;

@@ -166,6 +166,10 @@ table th {
     color: var(--primary);
 }
 
+html[data-palette="paper"]:not([data-theme="dark"]) table th {
+    background: var(--surface-subtle);
+}
+
 table tr:nth-child(even) {
     background: color-mix(in srgb, var(--surface-muted) 65%, transparent);
 }
