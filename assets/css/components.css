@@ -270,6 +270,10 @@
     .image-lightbox.active {
         display: flex;
     }
+    .image-lightbox-container > svg {
+        background: var(--pele-bg, var(--theme));
+        border-radius: 6px;
+    }
     .image-lightbox > img {
         max-width: min(96vw, 1800px);
         max-height: 92vh;
