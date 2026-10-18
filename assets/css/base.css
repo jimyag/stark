@@ -41,6 +41,16 @@
     --notion-card: #fffdf9;
     --notion-shadow: 0 1px 2px rgba(40, 34, 28, 0.05), 0 14px 40px rgba(40, 34, 28, 0.06);
     --theme-glow: rgba(143, 95, 47, 0.055);
+    --pele-bg: var(--theme);
+    --pele-fg: var(--primary);
+    --pele-muted: var(--secondary);
+    --pele-line: var(--primary);
+    --pele-surface: var(--surface-muted);
+    --pele-surface-alt: var(--surface-subtle);
+    --pele-border: var(--border);
+    --pele-accent: var(--link);
+    --pele-font: var(--font-body);
+    --pele-font-mono: var(--font-mono);
   }
 
   html[data-theme="dark"] {

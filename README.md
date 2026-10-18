@@ -326,7 +326,7 @@ Set `pinned: true` in a post's front matter. Pinned posts appear above the year-
 
 ### Mermaid Diagrams
 
-Use a fenced code block with the `mermaid` identifier. The Mermaid JS library is loaded only on pages that contain at least one diagram.
+Use a fenced code block with the `mermaid` identifier. [Pele](https://github.com/obsidianmd/pele) 1.6.0 renders the diagrams and is loaded from jsDelivr only on pages containing diagrams. Colors follow the theme through CSS variables without re-rendering. Diagrams keep their natural size and source direction; wide diagrams scroll horizontally.
 
 ````markdown
 ```mermaid

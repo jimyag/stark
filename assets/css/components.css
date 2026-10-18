@@ -596,11 +596,6 @@
         transition: background-color 0.2s, transform 0.2s;
     }
 
-    .mermaid svg,
-    .mermaid text,
-    .mermaid foreignObject,
-    .mermaid foreignObject *,
-    
     .mermaid:hover {
         background-color: rgba(0, 123, 255, 0.05) !important;
         transform: translateY(-1px);
@@ -613,33 +608,6 @@
     
     html[data-theme="dark"] .mermaid:hover { background-color: rgba(34, 211, 238, 0.12) !important; }
 
-    /* 改善线条颜色和对比度 */
-    .mermaid .er .entityBox {
-        stroke: #4a9eff !important;
-        stroke-width: 2px !important;
-    }
-
-    .mermaid .er .relationshipLabelBox {
-        stroke: #ff6b6b !important;
-        stroke-width: 2px !important;
-    }
-
-    .mermaid .er .relationshipLine {
-        stroke: #4ecdc4 !important;
-        stroke-width: 2px !important;
-    }
-
-    /* 改善文本可读性 */
-    .mermaid .er .label {
-        fill: #ffffff !important;
-        color: #ffffff !important;
-    }
-
-    /* 改善连接线 */
-    .mermaid .er .relationship {
-        stroke: #4ecdc4 !important;
-        stroke-width: 2px !important;
-    }
     
     /* Mermaid Lightbox 样式 - 参考图片 lightbox */
     
