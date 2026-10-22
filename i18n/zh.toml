@@ -43,6 +43,9 @@ other = "复制"
 [copy_code]
 other = "复制代码"
 
+[copy_image]
+other = "复制图片"
+
 [copied]
 other = "已复制!"
 

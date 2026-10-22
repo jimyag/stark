@@ -515,7 +515,7 @@
     zoom: 1, x: 0, y: 0, isDragging: false, dragStartX: 0, dragStartY: 0,
     mode: 'image', lastFocus: null,
   };
-  const LIGHTBOX_MIN_ZOOM = 0.5;
+  const LIGHTBOX_MIN_ZOOM = 0.05;
   const LIGHTBOX_MAX_ZOOM = 4;
   const LIGHTBOX_WHEEL_STEP = 0.1;
   const LIGHTBOX_BUTTON_STEP = 0.2;
@@ -581,7 +581,6 @@
       else mediaLightboxZoomOut(LIGHTBOX_WHEEL_STEP);
     }, { passive: false });
     container.addEventListener('mousedown', e => {
-      if (lightbox.zoom <= 1) return;
       lightbox.isDragging = true;
       lightbox.dragStartX = e.clientX - lightbox.x;
       lightbox.dragStartY = e.clientY - lightbox.y;
@@ -597,7 +596,7 @@
     document.addEventListener('mouseup', () => {
       if (!lightbox.isDragging) return;
       lightbox.isDragging = false;
-      container.style.cursor = lightbox.zoom > 1 ? 'grab' : 'default';
+      container.style.cursor = 'grab';
     });
     document.addEventListener('keydown', e => {
       if (!lightbox.el || lightbox.el.hidden) return;
@@ -606,7 +605,7 @@
       if (e.key === '-' || e.key === '_') { e.preventDefault(); mediaLightboxZoomOut(); return; }
       if (e.key === '0' || (lightbox.mode === 'mermaid' && e.key === ' ')) { e.preventDefault(); mediaLightboxReset(); return; }
       if (e.key === 'Tab') {
-        const focusables = [zoomOutBtn, zoomInBtn, resetBtn, closeBtn];
+        const focusables = [...controls.querySelectorAll('button')];
         const first = focusables[0];
         const last = focusables[focusables.length - 1];
         if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
@@ -624,7 +623,7 @@
       target.style.transform = `translate(${lightbox.x}px, ${lightbox.y}px) scale(${lightbox.zoom})`;
       target.style.transformOrigin = 'center center';
     }
-    lightbox.container.style.cursor = lightbox.zoom > 1 ? 'grab' : 'default';
+    lightbox.container.style.cursor = 'grab';
   }
 
   function mediaLightboxZoomIn(step = LIGHTBOX_BUTTON_STEP) {
@@ -633,7 +632,7 @@
   }
   function mediaLightboxZoomOut(step = LIGHTBOX_BUTTON_STEP) {
     lightbox.zoom = Math.max(LIGHTBOX_MIN_ZOOM, Number((lightbox.zoom - step).toFixed(2)));
-    if (lightbox.zoom <= 1) { lightbox.zoom = 1; lightbox.x = 0; lightbox.y = 0; }
+    if (lightbox.zoom <= 1) { lightbox.x = 0; lightbox.y = 0; }
     applyMediaTransform();
   }
   function mediaLightboxReset() {
@@ -643,6 +642,7 @@
 
   function openMediaLightbox({ mode, content, returnFocus, label }) {
     setupMediaLightbox();
+    lightbox.el.querySelector('.diagram-copy')?.remove();
     lightbox.mode = mode;
     lightbox.lastFocus = returnFocus || null;
     lightbox.zoom = 1; lightbox.x = 0; lightbox.y = 0; lightbox.isDragging = false;

@@ -336,7 +336,9 @@ graph TD
 ```
 ````
 
-Click a rendered diagram to open the lightbox. Keyboard shortcuts inside the lightbox: `+`/`-` to zoom, `0` or Space to reset, `Escape` to close.
+Click a rendered diagram to open the lightbox. Use the buttons or scroll wheel to zoom from 5% to 400%, and drag to move the diagram. Keyboard shortcuts: `+`/`-` to zoom, `0` or Space to reset to 100%, `Escape` to close. “Copy image” copies the complete diagram as a PNG at twice its natural resolution, preserving the current theme colors regardless of zoom or position. Copying requires HTTPS or localhost and browser clipboard support.
+
+Sequence-diagram branches and grouped regions use distinct background colors that adapt to light and dark mode. Explicit colors in the diagram source are preserved.
 
 ### Math
 

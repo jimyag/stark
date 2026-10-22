@@ -274,6 +274,15 @@
         background: var(--pele-bg, var(--theme));
         border-radius: 6px;
     }
+    .image-lightbox-container {
+        flex-shrink: 0;
+    }
+    .image-lightbox-controls .diagram-copy {
+        width: auto;
+        padding: 0 14px;
+        font-size: 14px;
+        white-space: nowrap;
+    }
     .image-lightbox > img {
         max-width: min(96vw, 1800px);
         max-height: 92vh;
@@ -306,7 +315,7 @@
         font-size: 26px;
         line-height: 1;
         cursor: pointer;
-        color: var(--on-primary);
+        color: #fff;
         background: rgba(0, 0, 0, 0.45);
     }
     .image-lightbox-zoom:hover,

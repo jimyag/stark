@@ -43,6 +43,9 @@ other = "Copy"
 [copy_code]
 other = "Copy code"
 
+[copy_image]
+other = "Copy image"
+
 [copied]
 other = "Copied!"
 

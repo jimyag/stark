@@ -47,7 +47,11 @@
     --pele-line: var(--primary);
     --pele-surface: var(--surface-muted);
     --pele-surface-alt: var(--surface-subtle);
-    --pele-border: var(--border);
+    --pele-border: var(--secondary);
+    --diagram-branch-0: color-mix(in srgb, #4385ce 15%, var(--pele-bg));
+    --diagram-branch-1: color-mix(in srgb, #36a078 15%, var(--pele-bg));
+    --diagram-branch-2: color-mix(in srgb, #cd9635 15%, var(--pele-bg));
+    --diagram-branch-3: color-mix(in srgb, #9a70c5 15%, var(--pele-bg));
     --pele-accent: var(--link);
     --pele-font: var(--font-body);
     --pele-font-mono: var(--font-mono);
