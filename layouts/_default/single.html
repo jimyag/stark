@@ -5,6 +5,15 @@
   <article>
     {{ if eq .Type "blog" }}{{ if not .Params.menu }}
     {{- $markdownOutput := .OutputFormats.Get "MARKDOWN" -}}
+    {{- /* Hugo's WordCount undercounts CJK text; count CJK characters and Latin words separately. */ -}}
+    {{- $cjkPattern := `[\p{Han}\p{Hiragana}\p{Katakana}\p{Hangul}]` -}}
+    {{- $cjkCount := len (findRE $cjkPattern .Plain) -}}
+    {{- $latinCount := countwords (replaceRE $cjkPattern " " .Plain) -}}
+    {{- $unitCount := add $cjkCount $latinCount -}}
+    {{- $readingMinutes := 0 -}}
+    {{- if gt $unitCount 0 -}}
+      {{- $readingMinutes = int (math.Ceil (add (div (float $cjkCount) 300) (div (float $latinCount) 200))) -}}
+    {{- end -}}
     <h1>{{ .Title }}</h1>
     <div class="post-meta-row">
       <p>
@@ -12,7 +21,7 @@
           <time datetime='{{ .Date.Format "2006-01-02" }}' pubdate>
             {{ .Date.Format (default "02 Jan, 2006" .Site.Params.dateFormat) }}
           </time>
-          · {{ .WordCount }} {{ i18n "words_unit" }} · {{ i18n "approx" }} {{ .ReadingTime }} {{ i18n "min_read" }}
+          · {{ $unitCount }} {{ i18n "words_unit" }} · {{ i18n "approx" }} {{ $readingMinutes }} {{ i18n "min_read" }}
         </i>
       </p>
       {{- with .Params.stark_mdx -}}

@@ -2,7 +2,16 @@
 
 {{- $hasMath := false -}}
 {{- if .IsPage -}}
-  {{- if or (gt (len (findRE "\\$[^\\$]+\\$" .RawContent)) 0) (gt (len (findRE "\\\\\\(" .RawContent)) 0) (gt (len (findRE "\\\\\\[" .RawContent)) 0) -}}
+  {{- /* Ignore code before scanning so dollar signs in examples and shell snippets do not load MathJax. */ -}}
+  {{- $raw := .RawContent -}}
+  {{- $raw = replaceRE "(?s)```.*?```" "" $raw -}}
+  {{- $raw = replaceRE "`[^`\n]*`" "" $raw -}}
+  {{- if or
+    (gt (len (findRE `\$\$[^$]+\$\$` $raw)) 0)
+    (gt (len (findRE `(?s)\\\(.*?\\\)` $raw)) 0)
+    (gt (len (findRE `(?s)\\\[.*?\\\]` $raw)) 0)
+    (gt (len (findRE `\$[^$\n]+\$` $raw)) 0)
+  -}}
     {{- $hasMath = true -}}
   {{- end -}}
 {{- end -}}

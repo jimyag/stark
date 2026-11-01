@@ -17,13 +17,13 @@ Live demo: [jimyag.com](https://jimyag.com)
 - Code block language label — language name shown in top-left corner of each code block
 - Reading progress bar — 3 px bar at the top of the viewport
 - Back to top button — appears after scrolling 300 px
-- Math rendering — MathJax loaded automatically only on pages that contain `$...$` or `\(...\)` expressions
+- Math rendering — MathJax loaded automatically only on pages with math delimiters outside code blocks
 - Enhanced SEO — canonical URL, Open Graph, Twitter Card, schema.org structured data (WebSite, Person, BlogPosting, BreadcrumbList)
 - Auto image optimization — local images resized to max 1200 px width and converted to WebP at build time
 - Year-grouped post list with pinned posts at the top, pagination support
 - Prev/Next post navigation at the bottom of each post
 - Related posts section at the bottom of each post (matched by tags)
-- Word count, estimated reading time, and last modified date in the post header
+- CJK-aware word count, estimated reading time, and last modified date in the post header
 - Callout and details shortcodes
 - Analytics — Plausible and Google Analytics 4 (opt-in, no script injected unless configured)
 - i18n — English and Chinese built-in, extensible to any language
